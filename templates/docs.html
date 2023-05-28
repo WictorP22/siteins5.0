@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Documentos - {% endblock %}</h1>
+{% block script %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+{% endblock %}
+{% endblock %}
+
+{% block content %}
+<!-- Main content -->
+    <section class="content-wrapper">
+      <div class="content">
+        <div class="container">
+
+            <h3 class="mt-4 mb-4">Documentos</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-success collapsed-card">
+                        <div class="card-header">
+                          <h3 class="card-title">{{ regimento.Title }} - <small><b>última atualização:</b> {{moment.locale('pt-br')}} {{moment(regimento.Atualização).format('LLL')}}</small></h3>
+
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body bg-white" style="display: none;">
+                          {% autoescape false %}{{ regimento.Corpo }}{% endautoescape %}
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                      <div class="card card-danger collapsed-card">
+                        <div class="card-header">
+                          <h3 class="card-title">{{ penal.Title }} - <small><b>última atualização:</b> {{moment.locale('pt-br')}} {{moment(penal.Atualização).format('LLL')}}</small></h3>
+
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                          {% autoescape false %}{{ penal.Corpo }}{% endautoescape %}
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                      <div class="card card-outline card-warning collapsed-card">
+                        <div class="card-header">
+                          <h3 class="card-title">Apostilas e dicas</h3>
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                          <ul class="nav flex-column">
+                            {% for apostila in apostilas %}
+                              <li class="nav-item p-2">
+                                <a href="{{apostila.Link}}" target="_blank">{{apostila.Titulo}}</a> - <span class="badge badge-primary mr-2">{{apostila.Autor}}</span><span class="badge badge-secondary">{{moment.locale('pt-br')}}{{moment(apostila.Data).format('LL')}}</span>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                </div>
+            </div>
+
+
+
+        </div>
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{{ super() }}
+{%- endblock content %}

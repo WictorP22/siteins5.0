@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Anuncios - {% endblock %}</h1>
+{% block script %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+{% endblock %}
+{% endblock %}
+
+{% block content %}
+<!-- Main content -->
+    <section class="content-wrapper">
+      <div class="content">
+        <div class="container">
+
+            <h3 class="mt-4 mb-4">
+              {% for anuncio in anuncios %}
+              {% endfor %}
+            </h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                          <h3 class="card-title">Legenda</h3>
+
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="card-body p-0">
+                          <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                              <a href="#" class="nav-link">
+                                <i class="far fa-circle text-danger"></i>
+                                Anúncios
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="#" class="nav-link">
+                                <i class="far fa-circle text-warning"></i> Informativos rápidos
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="#" class="nav-link">
+                                <i class="far fa-circle text-primary"></i>
+                                Atas
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card card-warning card-outline">
+                        <div class="card-header">
+                          <h3 class="card-title">Anúncios</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body p-0">
+                          <div class="table-responsive mailbox-messages">
+                            <table class="table table-hover table-striped">
+                              <tbody>
+                              {% for anuncio in anuncios %}
+
+                              <tr>
+                                <td class="mailbox-star">
+                                  {% if anuncio.Tipo == 'anuncio' %}
+                                  <i class="far fa-circle text-danger"></i>
+                                  {% elif anuncio.Tipo == 'rápido' %}
+                                  <i class="far fa-circle text-warning"></i>
+                                  {% elif anuncio.Tipo == 'ata' %}
+                                  <i class="far fa-circle text-primary"></i>
+                                  {% endif %}
+                                </td>
+                                <td class="mailbox-name"><a href="http://127.0.0.1:5000/anuncio/{{anuncio.Id}}">{{ anuncio.Title }}</a></td>
+                                <td class="mailbox-attachment">{{moment.locale('pt-br') }} {{ moment(anuncio.Atualização).fromNow() }}</td>
+                                <td class="mailbox-date"></td>
+                              </tr>
+
+                              {% endfor %}
+                              </tbody>
+                            </table>
+                            <!-- /.table -->
+                          </div>
+                          <!-- /.mail-box-messages -->
+                        </div>
+                      </div>
+                </div>
+            </div>
+
+
+        </div>
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{{ super() }}
+
+<script>
+</script>
+
+{%- endblock content %}

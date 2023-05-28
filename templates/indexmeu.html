@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content-wrapper">
+      <div class="content">
+        <div class="container">
+
+        <h3 class="mt-4 mb-4">Pódio parcial</h3>
+
+        <div class="row">
+            <div class="col-md-4" style="margin-top:1em;">
+                <!-- Widget: user widget style 2 -->
+                <div class="card card-widget widget-user-2">
+                  <!-- Add the bg color to the header using any of the bg-* classes -->
+                  <div class="widget-user-header bg-gray">
+                    <div class="widget-user-image">
+                      <img class="" src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{podio[1].Nick}}&direction=2&head_direction=3&size=l&action=std" alt="User Avatar">
+                    </div>
+                    <!-- /.widget-user-image -->
+                    <h3 class="widget-user-username">{{podio[1].Nick}}</h3>
+                    <h5 class="widget-user-desc">2° colocado</h5>
+                  </div>
+                  <div class="card-footer p-0">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                          <span class="nav-link">CFSd <span class="float-right badge bg-primary">{{podio[1].CFSd}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CFC1 <span class="float-right badge bg-info">{{podio[1].CFC1}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CFC2 <span class="float-right badge bg-info">{{podio[1].CFC2}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CAP <span class="float-right badge bg-success">{{podio[1].CAP}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">Pontos <span class="float-right badge bg-danger">{{podio[1].Pontos}}</span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- /.widget-user -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-4">
+                <!-- Widget: user widget style 2 -->
+                <div class="card card-widget widget-user-2">
+                  <!-- Add the bg color to the header using any of the bg-* classes -->
+                  <div class="widget-user-header bg-warning">
+                    <div class="widget-user-image">
+                      <img class="" src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{podio[0].Nick}}&direction=2&head_direction=3&size=l&action=std" alt="User Avatar">
+                    </div>
+                    <!-- /.widget-user-image -->
+                    <h3 class="widget-user-username">{{podio[0].Nick}}</h3>
+                    <h5 class="widget-user-desc">1° colocado</h5>
+                  </div>
+                  <div class="card-footer p-0">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                          <span class="nav-link">CFSd <span class="float-right badge bg-primary">{{podio[0].CFSd}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CFC1 <span class="float-right badge bg-info">{{podio[0].CFC1}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CFC2 <span class="float-right badge bg-info">{{podio[0].CFC2}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CAP <span class="float-right badge bg-success">{{podio[0].CAP}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">Pontos <span class="float-right badge bg-danger">{{podio[0].Pontos}}</span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- /.widget-user -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-4" style="margin-top:1em;">
+                <!-- Widget: user widget style 2 -->
+                <div class="card card-widget widget-user-2">
+                  <!-- Add the bg color to the header using any of the bg-* classes -->
+                  <div class="widget-user-header bg-orange">
+                    <div class="widget-user-image">
+                      <img class="" src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{podio[2].Nick}}&direction=2&head_direction=3&size=l&action=std" alt="User Avatar">
+                    </div>
+                    <!-- /.widget-user-image -->
+                    <h3 class="widget-user-username">{{podio[2].Nick}}</h3>
+                    <h5 class="widget-user-desc">3° colocado</h5>
+                  </div>
+                  <div class="card-footer p-0">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                          <span class="nav-link">CFSd <span class="float-right badge bg-primary">{{podio[2].CFSd}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CFC1 <span class="float-right badge bg-info">{{podio[2].CFC1}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CFC2 <span class="float-right badge bg-info">{{podio[2].CFC2}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">CAP <span class="float-right badge bg-success">{{podio[2].CAP}}</span></span>
+                      </li>
+                      <li class="nav-item">
+                        <span class="nav-link">Pontos <span class="float-right badge bg-danger">{{podio[2].Pontos}}</span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- /.widget-user -->
+              </div>
+              <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+      </div><!--/. container-fluid -->
+    </section>
+
+</div>
+
+  <!-- /.content-wrapper -->
+{{ super() }}
+{%- endblock content %}
