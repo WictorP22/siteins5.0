@@ -3,7 +3,6 @@ import time
 from flask import Flask, render_template, request, jsonify, json
 import gspread, json, requests
 from datetime import datetime
-from flask_moment import Moment
 from lista_membros import *
 from blogger import *
 
