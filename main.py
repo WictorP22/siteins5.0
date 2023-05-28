@@ -12,7 +12,7 @@ from blogger import *
 #gc = gspread.service_account(filename='service_acoount.json')
 #sh = gc.open_by_key('1SkdGGG_ke6rE_-PACEw8EIr5PeHEPRh-t0fnp46PX88')
 #worksheet = sh.worksheet("Página120")
-#valor = worksheet.get('A1:D3')asd
+#valor = worksheet.get('A1:D3')
 
 app = Flask(__name__)
 moment = Moment()
@@ -70,11 +70,6 @@ def consulta_instrutor(id):
         else:
             grupo = 'false'
     membro = busca_lista(id)
-    if not hasattr(membro, 'Cargo'):
-        cargo = '-'
-    else:
-        cargo = membro.Cargo
-
     return {
         "Nome": id,
         "Habbo": {
@@ -91,7 +86,7 @@ def consulta_instrutor(id):
         "Projetos": busca_projetos(id),
         "Infracoes": busca_infracoes(id),
         "História": busca_historia(id),
-        "Parciais": busca_parcial(id, cargo)
+        "Parciais": busca_parcial(id, membro['Cargo'])
     }
 
 #colocar site no ar

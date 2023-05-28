@@ -22,7 +22,7 @@
                   <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                       <div class="text-center">
-                        <small><i id="online" class="float-right fa-regular fa-solid fa-circle text-success"></i></small>
+                        <small><i id="online" class="float-right fa-regular fa-solid fa-circle {% if dados.Habbo.Online == True %}text-success{% else %}text-danger{% endif %}"></i></small>
                         <img class=" img-fluid"
                              src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{dados.Nome}}&direction=2&head_direction=3&size=l&action=std"
                              alt="User profile picture">

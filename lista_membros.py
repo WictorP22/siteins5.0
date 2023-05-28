@@ -23,6 +23,9 @@ def busca_lista(nick):
                 "TAGs": membro[10],
                 "Situação": membro[11]
             }
+    return {
+        "Cargo": "-"
+    }
 
 
 def busca_historico_metas(nick):
@@ -124,7 +127,6 @@ def busca_historia(nick):
 
 def busca_parcial(nick, cargo):
     aba_metas = planilha_central.worksheet('[x] Metas')
-    print(cargo)
     if ((cargo == 'Instrutor') or (cargo == 'Aprendiz')):
         metas = aba_metas.get('A2:H')
         for meta in metas:
@@ -201,7 +203,6 @@ def busca_podio():
     podio = aba_podio.get('A2:H4')
     retorno = []
     for pod in podio:
-        print(pod)
         retorno.append({
             "Nick": pod[0],
             "CFSd": pod[1],
