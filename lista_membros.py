@@ -86,7 +86,7 @@ def busca_infracoes(nick):
                 "data": data,
                 "Fiscalizador": infracao[1],
                 "Infrator": infracao[2],
-                "Infração": infracao[3],
+                "Infração": infracao[6],
                 "Anexo": infracao[5],
                 "ID": infracao[0],
                 "Gravidade": infracao[7]
