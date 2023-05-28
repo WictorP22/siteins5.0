@@ -331,7 +331,7 @@
                                         <dt class="col-sm-4">Fiscalizador</dt>
                                         <dd class="col-sm-8">{{ infracao.Fiscalizador }}</dd>
                                         <dt class="col-sm-4">Data</dt>
-                                        <dd class="col-sm-8">{{ infracao.data }}</dd>
+                                        <dd class="col-sm-8">{{ moment.locale('pt-br') }}{{ moment(infracao.data).format('LLL') }}</dd>
                                         <dt class="col-sm-4">Infração</dt>
                                         <dd class="col-sm-8">{{ infracao.Infração }}</dd>
                                         <dt class="col-sm-4">Gravidade</dt>
