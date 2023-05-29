@@ -7,7 +7,7 @@ def busca_lista(nick):
     aba_lista_de_membros = planilha_central.worksheet("[x] Lista de Membros")
     lista = aba_lista_de_membros.get('AE2:AP')
     for membro in lista:
-        if membro[1] == nick:
+        if membro[1].strip() == nick:
             data = datetime.strptime(membro[2], '%d/%m/%Y')
             return {
                 "Cargo": membro[0],
@@ -33,7 +33,7 @@ def busca_historico_metas(nick):
     metas = aba_historico_metas.get('L:U')
     retorno = []
     for meta in metas:
-        if(meta[2] == nick):
+        if(meta[2].strip() == nick):
             inicio = datetime.strptime(meta[0], '%d/%m/%Y')
             fim = datetime.strptime(meta[1], '%d/%m/%Y')
             retorno.append({
@@ -55,7 +55,7 @@ def busca_avaliacoes(nick):
     avaliacoes = aba_avaliacoes.get('A:M')
     retorno = []
     for avaliacao in avaliacoes:
-        if avaliacao[3] == nick:
+        if avaliacao[3].strip() == nick:
             inicio = datetime.strptime(avaliacao[0], '%d/%m/%Y %H:%M:%S')
             fim = datetime.strptime(avaliacao[4], '%d/%m/%Y %H:%M:%S')
             retorno.append({
@@ -80,13 +80,13 @@ def busca_infracoes(nick):
     infracoes = aba_infracoes.get('J2:Q')
     retorno = []
     for infracao in infracoes:
-        if infracao[2] == nick:
+        if infracao[2].strip() == nick:
             data = datetime.strptime(infracao[4], '%d/%m/%Y')
             retorno.append({
                 "data": data,
                 "Fiscalizador": infracao[1],
                 "Infrator": infracao[2],
-                "Infração": infracao[6],
+                "Infração": infracao[3],
                 "Anexo": infracao[5],
                 "ID": infracao[0],
                 "Gravidade": infracao[7]
@@ -98,7 +98,7 @@ def busca_projetos(nick):
     projetos = aba_projetos.get('R2:W')
     retorno = []
     for projeto in projetos:
-        if projeto[1] == nick:
+        if projeto[1].strip() == nick:
             data = datetime.strptime(projeto[0], '%d/%m/%Y %H:%M:%S')
             retorno.append({
                 "data": data,
@@ -114,7 +114,7 @@ def busca_historia(nick):
     aba_historia = planilha_central.worksheet('[x] História dos Instrutores')
     historias = aba_historia.get('B2:I')
     for historia in historias:
-        if historia[0] == nick:
+        if historia[0].strip() == nick:
             return {
                 "Cargo": historia[1],
                 "história": historia[2],
@@ -130,7 +130,7 @@ def busca_parcial(nick, cargo):
     if ((cargo == 'Instrutor') or (cargo == 'Aprendiz')):
         metas = aba_metas.get('A2:H')
         for meta in metas:
-            if meta[0] == nick:
+            if meta[0].strip() == nick:
                 return {
                     "Tipo": "Instrutor",
                     "Meta1": meta[1],
