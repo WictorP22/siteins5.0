@@ -5,9 +5,9 @@ gc = gspread.service_account(filename='service_acoount.json')
 planilha_central = gc.open_by_key('1NeWXNJnloZ4n_4DoOy3v2XPx3Q2EIFQOO_8mtU6FabA')
 def busca_lista(nick):
     aba_lista_de_membros = planilha_central.worksheet("[x] Lista de Membros")
-    lista = aba_lista_de_membros.get('AE2:AP')
+    lista = aba_lista_de_membros.get('AE2:Aq')
     for membro in lista:
-        if membro[1].strip() == nick:
+        if membro[1] == nick:
             data = datetime.strptime(membro[2], '%d/%m/%Y')
             return {
                 "Cargo": membro[0],
@@ -21,7 +21,8 @@ def busca_lista(nick):
                 "Ministério": membro[8],
                 "AV": membro[9],
                 "TAGs": membro[10],
-                "Situação": membro[11]
+                "Situação": membro[11],
+                "TAG": membro[12]
             }
     return {
         "Cargo": "-"
@@ -33,7 +34,7 @@ def busca_historico_metas(nick):
     metas = aba_historico_metas.get('L:U')
     retorno = []
     for meta in metas:
-        if(meta[2].strip() == nick):
+        if(meta[2] == nick):
             inicio = datetime.strptime(meta[0], '%d/%m/%Y')
             fim = datetime.strptime(meta[1], '%d/%m/%Y')
             retorno.append({
@@ -80,7 +81,7 @@ def busca_infracoes(nick):
     infracoes = aba_infracoes.get('J2:Q')
     retorno = []
     for infracao in infracoes:
-        if infracao[2].strip() == nick:
+        if infracao[2] == nick:
             data = datetime.strptime(infracao[4], '%d/%m/%Y')
             retorno.append({
                 "data": data,
@@ -98,7 +99,7 @@ def busca_projetos(nick):
     projetos = aba_projetos.get('R2:W')
     retorno = []
     for projeto in projetos:
-        if projeto[1].strip() == nick:
+        if projeto[1] == nick:
             data = datetime.strptime(projeto[0], '%d/%m/%Y %H:%M:%S')
             retorno.append({
                 "data": data,
@@ -114,7 +115,7 @@ def busca_historia(nick):
     aba_historia = planilha_central.worksheet('[x] História dos Instrutores')
     historias = aba_historia.get('B2:I')
     for historia in historias:
-        if historia[0].strip() == nick:
+        if historia[0] == nick:
             return {
                 "Cargo": historia[1],
                 "história": historia[2],
@@ -130,7 +131,7 @@ def busca_parcial(nick, cargo):
     if ((cargo == 'Instrutor') or (cargo == 'Aprendiz')):
         metas = aba_metas.get('A2:H')
         for meta in metas:
-            if meta[0].strip() == nick:
+            if meta[0] == nick:
                 return {
                     "Tipo": "Instrutor",
                     "Meta1": meta[1],
@@ -200,7 +201,7 @@ def busca_apostilas():
 
 def busca_podio():
     aba_podio = planilha_central.worksheet('[x] Pódio')
-    podio = aba_podio.get('A2:H4')
+    podio = aba_podio.get('A2:H24')
     retorno = []
     for pod in podio:
         retorno.append({
