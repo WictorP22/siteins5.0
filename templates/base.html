@@ -12,13 +12,17 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{ url_for('static', filename='plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+
+
+
   <!-- jQuery -->
     <script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js')}}"></script>
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/adminlte.min.css')}}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/151311a34e.js" crossorigin="anonymous')}}"></script>
 
       <!-- ChartJS -->
@@ -47,7 +51,7 @@
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand-md navbar-dark navbar-dark">
       <div class="container">
-        <a href="../../index3.html" class="navbar-brand">
+        <a href="/" class="navbar-brand">
           <img src="https://www.habbo.com.br/habbo-imaging/badge/b09064s43131s50134s17113s171153f3edc7f555be912c2392e285b05bd34.gif" alt="Instrutores" class="brand-image img-circle elevation-3" style="opacity: .8">
           <span class="brand-text font-weight-light">INS 2.0</span>
         </a>
@@ -67,6 +71,9 @@
             </li>
             <li class="nav-item">
               <a href="/anuncios" class="nav-link">Anúncios</a>
+            </li>
+            <li class="nav-item">
+              <a href="/projetos" class="nav-link">Projetos & Sugestões</a>
             </li>
           </ul>
           <form method="get" action="/instrutor" class="float-right form-inline ml-0 ml-md-3">
@@ -105,8 +112,19 @@
     <!-- REQUIRED SCRIPTS -->
     <!-- Bootstrap -->
     <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
     <!-- Sparkline -->
     <script src="{{ url_for('static', filename='plugins/sparklines/sparkline.js')}}"></script>
     <!-- JQVMap -->

@@ -31,6 +31,7 @@
                       <h3 class="text-center">{{dados.Nome}}</h3>
 
                       <p class="text-muted text-center">{{dados.Habbo.Missão}}</p>
+                      <p class="text-center"><small><span class="badge badge-primary">{{ dados.Membro.TAG }}</span></small></p>
 
                       <ul class="list-group list-group-unbordered mb-3">
                         <li class="list-group-item">
@@ -331,11 +332,13 @@
                                         <dt class="col-sm-4">Fiscalizador</dt>
                                         <dd class="col-sm-8">{{ infracao.Fiscalizador }}</dd>
                                         <dt class="col-sm-4">Data</dt>
-                                        <dd class="col-sm-8">{{ moment.locale('pt-br') }}{{ moment(infracao.data).format('LLL') }}</dd>
+                                        <dd class="col-sm-8">{{ infracao.data }}</dd>
                                         <dt class="col-sm-4">Infração</dt>
                                         <dd class="col-sm-8">{{ infracao.Infração }}</dd>
                                         <dt class="col-sm-4">Gravidade</dt>
                                         <dd class="col-sm-8">{{ infracao.Gravidade }}</dd>
+                                        <dt class="col-sm-4">Anexos</dt>
+                                        <dd class="col-sm-8"><a target="_blank" href="{{ infracao.Anexo }}">{{ infracao.Anexo }}</a></dd>
                                       </dl>
                                     </blockquote>
                                   {% endfor %}

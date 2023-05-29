@@ -96,7 +96,7 @@ def busca_infracoes(nick):
 
 def busca_projetos(nick):
     aba_projetos = planilha_central.worksheet('[x] Projetos')
-    projetos = aba_projetos.get('R2:W')
+    projetos = aba_projetos.get('W2:AC')
     retorno = []
     for projeto in projetos:
         if projeto[1] == nick:
@@ -212,5 +212,22 @@ def busca_podio():
             "CAP": pod[4],
             "Pontos": pod[5],
             "Situação": pod[7]
+        })
+    return retorno
+
+def lista_projetos():
+    aba_projetos = planilha_central.worksheet('[x] Projetos')
+    projetos = aba_projetos.get('W2:AC')
+    retorno = []
+    for projeto in projetos:
+        data = datetime.strptime(projeto[0], '%d/%m/%Y %H:%M:%S')
+        retorno.append({
+            "data": data,
+            "Autor": projeto[1],
+            "Modalidade": projeto[3],
+            "Tema": projeto[4],
+            "Veredito": projeto[5],
+            "Ordem": projeto[2],
+            "Comentário": projeto[6]
         })
     return retorno
