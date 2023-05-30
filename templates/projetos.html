@@ -19,7 +19,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12 mt-2">
-                <table id="example2" class="table table-striped table-hover">
+                <table id="example2" class="table table-striped table-hover projects">
                   <thead>
                   <tr>
                     <th></th>
@@ -37,11 +37,30 @@
                     <tr>
                       <td></td>
                       <td class="dtr-control">{{ projeto.Ordem }}</td>
-                      <td>{{ projeto.data }}</td>
-                      <td>{{ projeto.Autor}} </td>
+                      <td>{{ moment.locale('pt-br') }}{{ moment(projeto.data).format('LLL') }}</td>
+                      <td class="text-center">
+                        <ul class="list-inline">
+                              <li class="list-inline-item text-center">
+                                  <img alt="Avatar" class="table-avatar bg-info" style="height: 2.5rem;object-fit: none;object-position: center -30px;    padding: 0.1rem!important;" src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{ projeto.Autor}}&direction=2&head_direction=3&size=m&action=std"></br>
+                                {{ projeto.Autor }}
+                              </li>
+                          </ul>
+                      </td>
                       <td>{{ projeto.Modalidade }}</td>
                       <td>{{ projeto.Tema }}</td>
-                      <td>{{ projeto.Veredito }}</td>
+                      <td>
+                        {% if projeto.Veredito == 'Aprovado' %}
+                        <span class="badge badge-success">{{ projeto.Veredito }}</span>
+                        {% elif projeto.Veredito == 'Reprovado' %}
+                        <span class="badge badge-danger">{{ projeto.Veredito }}</span>
+                        {% elif projeto.Veredito == 'Aprovado com alterações' %}
+                        <span class="badge badge-warning">{{ projeto.Veredito }}</span>
+                        {% elif projeto.Veredito == 'Pendente' %}
+                        <span class="badge badge-info">{{ projeto.Veredito }}</span>
+                        {% else %}
+                        <span class="badge badge-secondary">{{ projeto.Veredito }}</span>
+                        {% endif %}
+                      </td>
                       <td>{{ projeto.Comentário }}</td>
                     </tr>
                   {% endfor %}
