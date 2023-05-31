@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Lista de Membros - {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content-wrapper">
+      <div class="content">
+        <div class="container">
+          {% for cargo in lista %}
+            <h3 class="mt-4 mb-4">{{cargo}}</h3>
+            <div class="row">
+            {% for membro in lista[cargo] %}
+              {% if lista[cargo][membro].Promo != "-": %}
+                {% set promocao = "{"+moment(lista[cargo][membro].Promo).format('DD MMM YYYY')+"}" %}
+              {% else %}
+                {% set promocao = " " %}
+              {% endif %}
+              {% if lista[cargo][membro].Situação == "[A]" %}
+                {% set classe = 'bg-gradient-primary' %}
+              {% elif lista[cargo][membro].Situação == "[L]" %}
+                {% set classe = 'bg-gradient-warning' %}
+              {% elif lista[cargo][membro].Situação == "[LR]" %}
+                {% set classe = 'bg-gradient-info' %}
+              {% endif %}
+
+              <div class="col-md-3 col-sm-6 col-12">
+                <a href="/instrutor?policial=WictorP2">
+                  <div class="info-box {{classe}}">
+                    <span class="info-box-icon"><img alt="{{ lista[cargo][membro].Nick }}" class="table-avatar" style="height: 8.5rem;object-fit: none;object-position: center center;padding: 0.1rem!important;width: 3.5rem;" src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&amp;user={{ lista[cargo][membro].Nick }}&amp;direction=2&amp;head_direction=3&amp;size=m&amp;action=std"></span>
+
+                    <div class="info-box-content">
+                      <span class="info-box-text">{{ lista[cargo][membro].Nick }}</span>
+                      <span class="info-box-number">{{ lista[cargo][membro].Cargo }}</span>
+
+                      <div class="progress">
+                        <div class="progress-bar" style="width: 100%"></div>
+                      </div>
+                      <span class="progress-description">
+                        <small>{{ moment.locale('pt-br') }} {{ moment(lista[cargo][membro].Entrada).format('DD MMM YYYY') }} {{promocao}}</small>
+                      </span>
+                      <span class="">
+                        <span class="badge bg-light">{{lista[cargo][membro].SubGrupos}}</span>
+                        <span class="badge bg-light">{{lista[cargo][membro].CAP}}</span>
+                        <span class="badge bg-light">{{lista[cargo][membro].AV}}</span>
+                      </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                </a>
+                <!-- /.info-box -->
+              </div>
+            {% endfor %}
+             </div>
+          {% endfor %}
+
+      </div><!--/. container-fluid -->
+    </section>
+
+</div>
+
+  <!-- /.content-wrapper -->
+{{ super() }}
+{%- endblock content %}

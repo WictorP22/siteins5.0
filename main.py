@@ -61,6 +61,10 @@ def instrutores():
 def projetos():
     return render_template("projetos.html", projetos=lista_projetos())
 
+@app.route("/membros")
+def membros():
+    return render_template("membros.html", lista=lista_membro())
+
 #consultar instrutor
 def consulta_instrutor(id):
     usuario = requests.get(f"https://www.habbo.com.br/api/public/users?name={id}")

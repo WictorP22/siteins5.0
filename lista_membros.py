@@ -231,3 +231,31 @@ def lista_projetos():
             "Comentário": projeto[6]
         })
     return retorno
+
+def lista_membro():
+    aba_lista_de_membros = planilha_central.worksheet("[X] Lista de Membros 2")
+    lista = aba_lista_de_membros.get('S2:Z')
+    cargos = aba_lista_de_membros.get("AD2:AD")
+    retorno = {};
+    for cargo in cargos:
+        retorno[cargo[0]] = {}
+        i = 0
+        for membro in lista:
+            if membro[0] == cargo[0]:
+                entrada = datetime.strptime(membro[2], '%d/%m/%Y')
+                if not membro[3]:
+                    promo = "-";
+                else:
+                    promo = datetime.strptime(membro[3], '%d/%m/%Y')
+                retorno[cargo[0]][i] = {
+                    "Cargo": membro[0],
+                    "Nick": membro[1],
+                    "Entrada": entrada,
+                    "Promo": promo,
+                    "CAP": membro[4],
+                    "AV": membro[5],
+                    "SubGrupos": membro[6],
+                    "Situação": membro[7]
+                }
+                i = i+1
+    return retorno;
