@@ -65,9 +65,9 @@ def projetos():
 def membros():
     return render_template("membros.html", lista=lista_membro())
 
-@app.route("/policia")
+@app.route("/politica")
 def politica():
-    return render_template("politica.html")
+    return render_template("policia.html")
 
 #consultar instrutor
 def consulta_instrutor(id):
