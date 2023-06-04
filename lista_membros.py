@@ -1,5 +1,5 @@
 import gspread, json, requests
-from datetime import datetime
+from datetime import datetime, date, timedelta, timezone
 
 gc = gspread.service_account(filename='service_acoount.json')
 planilha_central = gc.open_by_key('1NeWXNJnloZ4n_4DoOy3v2XPx3Q2EIFQOO_8mtU6FabA')
