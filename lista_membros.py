@@ -243,14 +243,15 @@ def lista_membro():
         for membro in lista:
             if membro[0] == cargo[0]:
                 entrada = datetime.strptime(membro[2], '%d/%m/%Y')
+                nentrada = entrada + timedelta(days=1)
                 if not membro[3]:
                     promo = "-";
                 else:
-                    promo = datetime.strptime(membro[3], '%d/%m/%Y')
+                    promo = datetime.strptime(membro[3], '%d/%m/%Y') + timedelta(days=1)
                 retorno[cargo[0]][i] = {
                     "Cargo": membro[0],
                     "Nick": membro[1],
-                    "Entrada": entrada,
+                    "Entrada": nentrada,
                     "Promo": promo,
                     "CAP": membro[4],
                     "AV": membro[5],
