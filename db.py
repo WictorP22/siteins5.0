@@ -1,7 +1,6 @@
-from main import bcrypt
 import mysql.connector, requests, json
 from lista_membros import *
-from flask_bcrypt import Bcrypt
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 def db2():
 	return mysql.connector.connect(host='us-cdbr-east-06.cleardb.net', user='b5010672adeb65', password='b5d9fcae', database='heroku_40a73087811b6c2')
@@ -22,7 +21,7 @@ def registrar(nick, tag, email, senha, confirmasenha, missao):
 	plan = busca_lista(nick)
 	if plan['Cargo'] == "-":
 		return "<span class='text-danger'>Usuário não ativo na lista de membros</span>"
-	senhaEncript = bcrypt.generate_password_hash(senha)
+	senhaEncript = generate_password_hash(senha)
 	sql = "INSERT INTO usuarios (nick, email, tag, senha, situacao) VALUES(%(nick)s, %(email)s, %(tag)s, %(senha)s, 'A')"
 	nzc = db2()
 	cursor = nzc.cursor()
@@ -49,7 +48,7 @@ def logar(nick, senha2):
 	cursor.reset()
 	cursor.close()
 	if quantidade == 1:
-		senhaEncript = bcrypt.check_password_hash(novaSenha, senha2)
+		senhaEncript = check_password_hash(novaSenha, senha2)
 		if senhaEncript == True:
 			return {
 				'resultado': 'false',
@@ -84,7 +83,7 @@ def recuperando(nick, missao, senha, novasenha):
 		iduser = id
 	cursor.reset()
 	if quantidade == 1:
-		senhaEncript = bcrypt.generate_password_hash(senha)
+		senhaEncript = generate_password_hash(senha)
 		sql = "UPDATE usuarios SET senha=%(senha)s, situacao='A' WHERE id=%(nick)s"
 		cursor.execute(sql, {'senha': senhaEncript, 'nick': iduser})
 		nzc.commit()
