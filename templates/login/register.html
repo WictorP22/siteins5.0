@@ -1,0 +1,182 @@
+{% extends 'login/base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Registro - {% endblock %}</h1>
+{% block script %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="register-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="/" class="navbar-brand">
+          <img src="https://www.habbo.com.br/habbo-imaging/badge/b09064s43131s50134s17113s171153f3edc7f555be912c2392e285b05bd34.gif" alt="Instrutores" class="brand-image">
+          <span class="brand-text font-weight-light">INS 2.0</span>
+        </a>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">{% autoescape false %}{{enviou}}{% endautoescape %}</p>
+      <p class="login-box-msg">Coloque em sua missão: <span class="badge badge-warning">{{codigo}}</span></p>
+      <form action="registro" id="register" method="post">
+        <div class="input-group mb-3">
+          <input name="nick" type="text" class="form-control" placeholder="Nickname">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input name="tag" type="text" class="form-control" placeholder="TAG">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fa-solid fa-user-tag"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input name="email" type="email" class="form-control" placeholder="E-mail">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input name="senha" id="senha" type="password" class="form-control" placeholder="Senha">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input name="confirmasenha" type="password" class="form-control" placeholder="Repita a senha">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="icheck-primary input-group">
+              <input type="checkbox" id="termos" name="termos" value="aceito">
+              <label for="termos">
+               Eu aceito os termos de <a href="politica">Política e Privacidade</a>
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <a href="/login" class="text-center">Já possuo uma conta.</a>
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+{{ super() }}
+<script>
+$(function () {
+  var response, usuario, tag;
+  $.validator.addMethod(
+        "checaHabbo",
+        function(value, element) {
+            $.ajax({
+                type: "GET",
+                url: "https://www.habbo.com.br/api/public/users",
+                data: "name="+value,
+                dataType:"json",
+                success: function(msg)
+                {
+                    response=true
+                },
+                error: function()
+                {
+                  response=false
+                }
+             });
+            return response;
+        },
+        "Usuário não encontrado no Habbo"
+    );
+  $.validator.setDefaults({
+    submitHandler: function () {
+      $('#register').submit();
+    }
+  });
+  $('#register').validate({
+    rules: {
+      nick: {
+        required: true,
+        checaHabbo: true
+      },
+      tag: {
+        required: true,
+        minlength: 3,
+        maxlength: 3
+      },
+      email: {
+        required: true,
+        email: true,
+      },
+      senha: {
+        required: true,
+        minlength: 5
+      },
+      confirmasenha: {
+        required: true,
+        equalTo: "#senha"
+      },
+      termos: {
+        required: true
+      },
+    },
+    messages: {
+      nick: {
+        required: "Insira o seu nickname",
+        checaHabbo: "Usuário não encontrado no Habbo"
+      },
+      tag: {
+        required: "Insira sua TAG na RCC",
+        minlength: "Apenas três caracteres",
+        maxlength: "Apenas três caracteres"
+      },
+      email: {
+        required: "Insira seu endereço de email",
+        email: "Email invalido"
+      },
+      senha: {
+        required: "Insira uma senha",
+        minlength: "Mínimo de 5 caracteres"
+      },
+      confirmasenha: {
+        required: "Repita sua senha",
+        equalTo: "Senhas não coincidem"
+      },
+      termos: "Leia e aceite os termos de serviço"
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.input-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
+});
+</script>
+{%- endblock content %}

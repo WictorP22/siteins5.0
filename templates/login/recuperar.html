@@ -1,0 +1,64 @@
+{% extends 'login/base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Recuperar - {% endblock %}</h1>
+{% block script %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="login-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="/" class="navbar-brand">
+          <img src="https://www.habbo.com.br/habbo-imaging/badge/b09064s43131s50134s17113s171153f3edc7f555be912c2392e285b05bd34.gif" alt="Instrutores" class="brand-image">
+          <span class="brand-text font-weight-light">INS 2.0</span>
+        </a>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">{% autoescape false %}{{enviou}}{% endautoescape %}</p>
+      <p class="login-box-msg">Coloque em sua missão: <span class="badge badge-warning">{{codigo}}</span></p>
+      <form action="recuperar" method="post">
+        <div class="input-group mb-3">
+          <input name="nick" type="text" class="form-control" placeholder="Nickname">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="senha" class="form-control" placeholder="Senha">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="confirmasenha" class="form-control" placeholder="Repita a senha">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">Alterar minha senha</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+      <p class="mt-3 mb-1">
+        <a href="/login">Já possuo uma conta.</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+{{ super() }}
+{%- endblock content %}
