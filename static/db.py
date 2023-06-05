@@ -3,7 +3,7 @@ import mysql.connector, requests, json
 from lista_membros import *
 from flask_bcrypt import Bcrypt
 
-def db():
+def db2():
 	return mysql.connector.connect(host='us-cdbr-east-06.cleardb.net', user='b5010672adeb65', password='b5d9fcae', database='heroku_40a73087811b6c2')
 
 def registrar(nick, tag, email, senha, confirmasenha, missao):
@@ -24,7 +24,7 @@ def registrar(nick, tag, email, senha, confirmasenha, missao):
 		return "<span class='text-danger'>Usuário não ativo na lista de membros</span>"
 	senhaEncript = bcrypt.generate_password_hash(senha)
 	sql = "INSERT INTO usuarios (nick, email, tag, senha, situacao) VALUES(%(nick)s, %(email)s, %(tag)s, %(senha)s, 'A')"
-	nzc = db()
+	nzc = db2()
 	cursor = nzc.cursor()
 	cursor.execute(sql, {
 		'nick': nick,
@@ -38,7 +38,7 @@ def registrar(nick, tag, email, senha, confirmasenha, missao):
 	return"<span class='text-success'>Usuário cadastrado e ativo</span>"
 
 def logar(nick, senha2):
-	nzc = db()
+	nzc = db2()
 	cursor = nzc.cursor()
 	sql = f"SELECT id, nick, senha FROM usuarios WHERE nick=%(nome)s"
 	cursor.execute(sql, {'nome': nick})
@@ -74,7 +74,7 @@ def recuperando(nick, missao, senha, novasenha):
 	plan = busca_lista(nick)
 	if plan['Cargo'] == "-":
 		return "<span class='text-danger'>Usuário não ativo na lista de membros</span>"
-	nzc = db()
+	nzc = db2()
 	cursor = nzc.cursor()
 	sql = f"SELECT id, nick, situacao FROM usuarios WHERE nick='{nick}'"
 	cursor.execute(sql)
@@ -96,7 +96,7 @@ def recuperando(nick, missao, senha, novasenha):
 
 
 def checainfo(coluna, valor):
-	nzc = db()
+	nzc = db2()
 	cursor = nzc.cursor()
 	sql = f"SELECT id, nick, email, tag FROM usuarios WHERE {coluna}='{valor}'"
 	cursor.execute(sql)
