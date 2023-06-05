@@ -33,6 +33,10 @@ def relatorios():
     respostas = relatoriosEst.get('B6:I')
     return jsonify(respostas)
 
+@app.route("/politica")
+def politica():
+    return render_template("policia.html")
+
 #login
 @app.route("/login", methods=['GET', 'POST'])
 def login():
