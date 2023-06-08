@@ -39,3 +39,30 @@ def busca_anuncio(id):
                 "Tipo": post['labels'][0]
             }
     return retorno
+
+def busca_scripts():
+    posts = blog.posts().list(blogId=BlogID).execute()
+    retorno = []
+    for post in posts['items']:
+        if 'script' in post['labels']:
+            if 'primary' in post['labels']:
+                cor = 'primary'
+            elif 'warning' in post['labels']:
+                cor = 'warning'
+            elif 'danger' in post['labels']:
+                cor = 'danger'
+            elif 'info' in post['labels']:
+                cor = 'info'
+            else:
+                cor = 'light'
+            publicado = post['updated'][0:19]
+            data = datetime.strptime(publicado, '%Y-%m-%dT%H:%M:%S')
+            retorno.append({
+                "Id": post['id'],
+                "Title": post['title'],
+                "Atualização": post['updated'],
+                "Corpo": post['content'],
+                "Tipo": post['labels'][0],
+                "Cor": cor
+            })
+    return retorno

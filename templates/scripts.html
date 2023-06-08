@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Scripts - {% endblock %}</h1>
+  <style rel="stylesheet">
+    code {
+        overflow: auto;
+    display: block;
+    height: auto;
+    max-height: 250px;
+    white-space: normal;
+    padding-top: 5px;
+    font: 0.9em Courier,Courier New,monospace;
+    line-height: 1.3em;
+    color: #2E8B57;
+    margin: 2px 0;
+    }
+  </style>
+{% block script %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+{% endblock %}
+{% endblock %}
+
+{% block content %}
+<!-- Main content -->
+    <section class="content-wrapper">
+      <div class="content">
+        <div class="container">
+
+            <h3 class="mt-4 mb-4">Scripts</h3>
+            <div class="row">
+                <div class="col-md-12">
+                  {% for script in scripts %}
+                      <div class="card card-{{script.Cor}} card-outline collapsed-card">
+                        <div class="card-header">
+                          <h3 class="card-title">{{ script.Title }} - <small><b>última atualização:</b> <span id="{{script.Id}}"></span></small></h3>
+                          <script>
+                            $("#{{script.Id}}").html(moment('{{script.Atualização}}').locale('pt-br').format('LLL'));
+                          </script>
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                          {% set oldScript = script.Corpo %}
+                          {% set newScript = oldScript.replace('[nick]', session['nick']) %}
+                            {% set newScript = newScript.replace('[code]', '<pre><code class="language-html" data-lang="html">') %}
+                            {% set newScript = newScript.replace('[/code]', '</code></pre>') %}
+                            {% set newScript = newScript.replace('[spoiler]', '<div class="card collapsed-card card-outline card-info">') %}
+                            {% set newScript = newScript.replace('[/spoiler]', '</div>') %}
+                            {% set newScript = newScript.replace('[title]', '<div class="card-header"><div class="card-title">') %}
+                            {% set newScript = newScript.replace('[/title]', '</div><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button></button></div></div>') %}
+                            {% set newScript = newScript.replace('[body]', '<div class="card-body">') %}
+                            {% set newScript = newScript.replace('[/body]', '</div>') %}
+                            {% set newScript = newScript.replace('[TAG]', session['tag']) %}
+                          {% autoescape false %}
+                            {{newScript}}
+                          {% endautoescape %}
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                  {% endfor %}
+                </div>
+            </div>
+
+
+
+        </div>
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{{ super() }}
+{%- endblock content %}

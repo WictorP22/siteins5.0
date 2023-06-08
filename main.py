@@ -33,10 +33,6 @@ def relatorios():
     respostas = relatoriosEst.get('B6:I')
     return jsonify(respostas)
 
-@app.route("/politica")
-def politica():
-    return render_template("policia.html")
-
 #login
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -47,6 +43,8 @@ def login():
         if enviou['resultado'] == 'false':
             session['logado'] = True
             session['nick'] = request.form['nick']
+            session['tag'] = 'WiT'
+            session['membro'] = True
             return redirect('/')
         else:
             return render_template("login/login.html", enviou=enviou['msg'])
@@ -95,6 +93,7 @@ def convidado():
         if not 'error' in membro:
             session['logado'] = True
             session['nick'] = nick
+            session['membro'] = False
             return redirect("/")
         else:
             return render_template("login/convidado.html", enviou="<span class='text-danger'>Não é um Habbo válido.</span>")
@@ -107,6 +106,8 @@ def logout():
     if 'logado' in session:
         session.pop('nick', None)
         session.pop('logado', None)
+        session.pop('tag', None)
+        session.pop('membro', None)
     return redirect('/login')
 
 #index
@@ -167,6 +168,14 @@ def auditoria():
         return redirect('/login')
     return render_template("auditoria.html", mes=busca_auditoria('2023'))
 
+@app.route("/scripts")
+def scripts():
+    if not 'logado' in session:
+        return redirect('/login')
+    if session['membro'] == False:
+        return redirect('/')
+    return render_template("scripts.html", scripts=busca_scripts())
+
 #consultar instrutor
 def consulta_instrutor(id):
     usuario = requests.get(f"https://www.habbo.com.br/api/public/users?name={id}")
@@ -201,4 +210,5 @@ def consulta_instrutor(id):
 
 #colocar site no ar
 if __name__ == "__main__":
+    busca_scripts()
     app.run(debug=True)
