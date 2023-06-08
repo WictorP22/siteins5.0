@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Documentos - {% endblock %}</h1>
+  <h1>{% block title %}{{ instrutor }} - {% endblock %}</h1>
 {% block script %}
     {{ super() }}
     {{ moment.include_moment() }}
@@ -10,126 +10,619 @@
 
 {% block content %}
 <!-- Main content -->
-<style>
-  .sliderprojet {
-    display:none;
-  }
-</style>
-  <section class="content-wrapper">
-    <div class="content">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 mt-2">
-                <table id="example2" class="table table-striped table-hover projects">
-                  <thead>
-                  <tr>
-                    <th></th>
-                    <th>Início</th>
-                    <th>Curso</th>
-                    <th>Instrutor</th>
-                    <th>Presentes</th>
-                    <th>Aprovados</th>
-                    <th>Comentários</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {% for relatorio in relatorios %}
-                    <tr>
-                      <td></td>
-                      <td class="dtr-control">{{ relatorio.Início }}</td>
-                      <td>{{ relatorio.AulaAbreviada }}</td>
-                      <td class="text-center">
-                        <a href="https://inssystem.herokuapp.com/instrutor?policial={{relatorio.Instrutor}}">
-                          <ul class="list-inline">
-                              <li class="list-inline-item text-center">
-                                  <img alt="Avatar" class="table-avatar  bg-info" style="height: 2.5rem;object-fit: none;object-position: center -30px;    padding: 0.1rem!important;" src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{ relatorio.Instrutor}}&direction=2&head_direction=3&size=m&action=std"></br>
-                                {{ relatorio.Instrutor }}
+    <section class="content-wrapper">
+      <div class="content">
+        <div class="container">
+
+            <h3 class="mt-4 mb-4"><b>{{dados.Nome}}</b> - Perfil</h3>
+            <div class="row">
+                <div class="col-md-3">
+
+                  <!-- Profile Image -->
+                  <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                      <div class="text-center">
+                        <small><i id="online" class="float-right fa-regular fa-solid fa-circle {% if dados.Habbo.Online == True %}text-success{% else %}text-danger{% endif %}"></i></small>
+                        <img class=" img-fluid"
+                             src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{dados.Nome}}&direction=2&head_direction=3&size=l&action=std"
+                             alt="User profile picture">
+                      </div>
+
+                      <h3 class="text-center">{{dados.Nome}}</h3>
+
+                      <p class="text-muted text-center">{{dados.Habbo.Missão}}</p>
+                      <p class="text-center"><small><span class="badge badge-primary">{{ dados.Membro.TAG }}</span></small></p>
+
+                      <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item">
+                          <b>Cargo</b> <span class="float-right badge badge-primary">{{dados.Membro.Cargo}}</span>
+                        </li>
+                        <li class="list-group-item">
+                          <b>Sub-grupos</b> <span class="float-right badge badge-primary">{{ dados.Membro.TAGs }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Tempo de CIA</b> <span id="tempo" class="float-right badge badge-primary">{% if not dados.Membro.Entrada %}-{% else %}{{ moment.locale('pt-br') }}{{ moment(dados.Membro.Entrada).fromNow() }}{% endif %}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Situação</b>
+                            {% if dados.Membro.Situação == '[L]' %}
+                              <span class="float-right badge badge-info">Em licença</span>
+                            {% elif dados.Membro.Situação == '[LR]' %}
+                              <span class="float-right badge badge-info">Retornou</span>
+                            {% elif dados.Membro.Situação == '[NM]' %}
+                              <span class="float-right badge badge-info">Membro novo</span>
+                            {% elif dados.Membro.Situação %}
+                              <span class="float-right badge badge-success">Ativo</span>
+                            {% else %}
+                              <span class="float-right badge badge-danger">Inativo</span>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                          <b>Possuí emblema?</b>
+                            {% if dados.Habbo.Grupo == 'true' %}
+                              <span class="float-right badge badge-success"><i class="fas fa-check"></i></span>
+                            {% else %}
+                              <span class="float-right badge badge-danger"><i class="fa-solid fa-x"></i></span>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                          <b>Perfil</b>
+                            {% if dados.Habbo.Visibilidade == True %}
+                              <span class="float-right badge badge-success"><i class="fas fa-check"></i></span>
+                            {% else %}
+                              <span class="float-right badge badge-danger"><i class="fa-solid fa-x"></i></span>
+                            {% endif %}
+                        </li>
+                      </ul>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+                <div class="col-md-7">
+                  <div class="card">
+                    <div class="card-header p-2">
+                      <ul class="nav nav-pills">
+                        <li class="nav-item"><a class="nav-link active" href="#historico" data-toggle="tab">Histórico</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#avaliacoes" data-toggle="tab">Avaliações</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#infracoes" data-toggle="tab">Infrações</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#projetos" data-toggle="tab">Projetos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#sobre" data-toggle="tab">Sobre mim</a></li>
+                      </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+
+
+                      <!-- ./tab-pane historico -->
+                      <div class="tab-content">
+                        <div class="active tab-pane" id="historico">
+                          {% for historico in dados.Historico %}
+                            {% if historico.Situação == '[A]' %}
+                              {% set classe = 'bg-success' %}
+                              {% set icone = '<i class="fas fa-check-double"></i>' %}
+                            {% elif historico.Situação == '[B]' %}
+                              {% set classe = 'bg-danger' %}
+                              {% set icone = '<i class="fa-solid fa-xmark"></i>' %}
+                            {% elif historico.Situação == '[L]' %}
+                              {% set classe = 'bg-warning' %}
+                              {% set icone = '<i class="fa-solid fa-mask-face"></i>' %}
+                            {% elif historico.Situação == '[LR]' %}
+                              {% set classe = 'bg-info' %}
+                              {% set icone = '<i class="fa-solid fa-hand-back-fist"></i>' %}
+                            {% elif historico.Situação == '[NM]' %}
+                              {% set classe = 'bg-info' %}
+                              {% set icone = '<i class="fa-solid fa-baby"></i>' %}
+                            {% else %}
+                            {% endif %}
+                          <div class="info-box {{classe}}">
+                            <span class="info-box-icon">{% autoescape false %}{{icone}}{% endautoescape %}</span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ moment(historico.Inicio).format('L') }} à {{ moment(historico.Fim).format('L') }} - <small>{{ historico.Tipo }}</small></span>
+                            {% if historico.Tipo == 'Aprendiz/Instrutor' %}
+                                <span class="info-box-number">{{ historico.Meta5 }} pontos</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 100%"></div>
+                                </div>
+                                <span class="progress-description">
+                                    <span class="badge badge-light">{{ historico.Meta1 }} CFsd</span>
+                                    <span class="badge badge-light">{{ historico.Meta2 }} CFC1</span>
+                                    <span class="badge badge-light">{{ historico.Meta3 }} CFC2</span>
+                                    <span class="badge badge-light">{{ historico.Meta4 }} CAP</span>
+                                </span>
+                            {% elif historico.Tipo == 'Graduador' %}
+                                <span class="info-box-number">{{ historico.Meta3 }} pontos</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 100%"></div>
+                                </div>
+                                <span class="progress-description">
+                                    <span class="badge badge-light">{{ historico.Meta1 }} CFI</span>
+                                    <span class="badge badge-light">{{ historico.Meta2 }} Acompanhamento</span>
+                                </span>
+                            {% elif historico.Tipo == 'Avaliador' %}
+                                <span class="info-box-number">{{ historico.Meta2 }} pontos</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 100%"></div>
+                                </div>
+                                <span class="progress-description">
+                                    <span class="badge badge-light">{{ historico.Meta1 }} Avaliação</span>
+                                </span>
+                            {% elif historico.Tipo == 'Capacitador' %}
+                                <span class="info-box-number">{{ historico.Meta1 }} Capacitação</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 100%"></div>
+                                </div>
+                                <span class="progress-description">
+                                </span>
+                            {% else %}
+                            {% endif %}
+                            </div>
+                        </div>
+                          {% endfor %}
+                        </div>
+                        <!-- /.tab-pane Histórico -->
+
+
+                        <!-- /.tab-pane Avaliação -->
+                        <div class="tab-pane" id="avaliacoes">
+                          {% for av in dados.Avaliações %}
+                          {% if av.Qualidade == 'Péssima' %}
+                            {% set classe = 'bg-danger' %}
+                          {% elif av.Qualidade == 'Ruim' %}
+                            {% set classe = 'bg-maroon' %}
+                          {% elif av.Qualidade == 'Regular' %}
+                            {% set classe = 'bg-info' %}
+                          {% elif av.Qualidade == 'Boa' %}
+                            {% set classe = 'bg-olive' %}
+                          {% elif av.Qualidade == 'Excelente' %}
+                            {% set classe = 'bg-success' %}
+                          {% else %}
+                          {% endif %}
+                            <div class="card card-widget widget-user-2 collapsed-card">
+                                <!-- Add the bg color to the header using any of the bg-* classes -->
+                                <div class="widget-user-header {{classe}}">
+                                  <div class="widget-user-image">
+                                    <img class="" src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{ av.Avaliador }}&direction=2&head_direction=3&size=l&action=std" alt="User Avatar">
+                                  </div>
+                                  <!-- /.widget-user-image -->
+                                  <h3 class="widget-user-username">{{ av.Avaliador }}</h3>
+                                  <h5 class="widget-user-desc"><span class="badge badge-light">{{ av.Qualidade }}</span></h5>
+                                  <div class="card-tools">
+                                    <button type="button" class="badge badge-light btn" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                </div>
+                                <div class="card-body pb-0">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Dados da avaliação</h3>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <b>Data e hora</b> <span class="float-right badge badge-primary">{{moment.locale('pt-br')}}{{ moment(av.Inicio).format('LLL') }}</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                  <b>Prints</b> <a href="{{ av.Anexos }}" target="_BLANK"><span class="float-right badge badge-primary">{{ av.Anexos }}</span></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <b>Avaliador</b> <span class="float-right badge badge-primary">{{ av.Avaliador }}</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <b>Conta Utilizada</b> <span class="float-right badge badge-primary">{{ av.Fake }}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-0">
+                                        <div class="card-body">
+                                            <ul class="list-group">
+                                                <li class="list-group"><b>Comentário</b></li>
+                                                <li class="list-group">{{ av.Comentários }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- Corredor -->
+                                    <div class="card-body pt-0 card-outline card-primary ">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Avaliação no Corredor</h3>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <ul class="list-group">
+                                                  {% set coments = av.Corredor.split(',') %}
+                                                  {% for coment in coments %}
+                                                    <li class="list-group-item">{{coment}}</li>
+                                                  {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Fim corredor -->
+
+                                    <!-- Aula -->
+                                    <div class="card-body pt-0 card-outline card-primary ">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Avaliação da Aula</h3>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <ul class="list-group">
+                                                    {% set coments = av.Aula.split(',') %}
+                                                  {% for coment in coments %}
+                                                    <li class="list-group-item">{{coment}}</li>
+                                                  {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Fim Aula -->
+
+                                    <!-- teste teórico -->
+                                    <div class="card-body pt-0 card-outline card-primary ">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Avaliação Teste Teórico</h3>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <ul class="list-group">
+                                                    {% set coments = av.Teste.split(',') %}
+                                                  {% for coment in coments %}
+                                                    <li class="list-group-item">{{coment}}</li>
+                                                  {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Fim teste teórico -->
+
+                                    <!-- comandos -->
+                                    <div class="card-body pt-0 card-outline card-primary ">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Avaliação de Comandos</h3>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <ul class="list-group">
+                                                    {% set coments = av.Comandos.split(',') %}
+                                                  {% for coment in coments %}
+                                                    <li class="list-group-item">{{coment}}</li>
+                                                  {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Fim comandos -->
+
+                                    <!-- finalização -->
+                                    <div class="card-body pt-0 card-outline card-primary ">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Avaliação de Finalização</h3>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <ul class="list-group">
+                                                    {% set coments = av.Finalização.split(',') %}
+                                                  {% for coment in coments %}
+                                                    <li class="list-group-item">{{coment}}</li>
+                                                  {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Fim finalização -->
+                                </div>
+                              </div>
+                          {% endfor %}
+                        </div>
+                        <!-- /.tab-pane Avaliações -->
+
+
+                        <!-- /.tab-pane Infrações -->
+                        <div class="tab-pane" id="infracoes">
+                                  {% for infracao in dados.Infracoes %}
+                                    <blockquote>
+                                      <dl class="row">
+                                        <dt class="col-sm-4">Fiscalizador</dt>
+                                        <dd class="col-sm-8">{{ infracao.Fiscalizador }}</dd>
+                                        <dt class="col-sm-4">Data</dt>
+                                        <dd class="col-sm-8">{{ infracao.data }}</dd>
+                                        <dt class="col-sm-4">Infração</dt>
+                                        <dd class="col-sm-8">{{ infracao.Infração }}</dd>
+                                        <dt class="col-sm-4">Gravidade</dt>
+                                        <dd class="col-sm-8">{{ infracao.Gravidade }}</dd>
+                                        <dt class="col-sm-4">Anexos</dt>
+                                        <dd class="col-sm-8"><a target="_blank" href="{{ infracao.Anexo }}">{{ infracao.Anexo }}</a></dd>
+                                      </dl>
+                                    </blockquote>
+                                  {% endfor %}
+                        </div>
+                        <!-- /.tab-pane Infrações -->
+
+
+                        <!-- /.tab-pane Projetos -->
+                        <div class="tab-pane" id="projetos">
+                          <div id="accordion">
+                            <div class="card rounded-0 card-primary m-0">
+                              {% for projeto in dados.Projetos %}
+                                {% if projeto.Veredito == 'Aprovado' %}
+                                  <div class="card-header bg-success rounded-0">
+                                {% elif projeto.Veredito == 'Reprovado' %}
+                                  <div class="card-header bg-danger rounded-0">
+                                {% else %}
+                                  <div class="card-header bg-warning rounded-0">
+                                {% endif %}
+                                  <h4 class="card-title w-100">
+                                    <a class="d-block w-100 collapsed" data-toggle="collapse" href="#ordem{{ projeto.Ordem }}" aria-expanded="false">
+                                      {{ projeto.Modalidade }} - <small>{{ moment.locale('pt-br') }} {{ moment(projeto.data).format('L') }}</small>
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="ordem{{ projeto.Ordem }}" class="collapse" data-parent="#accordion" style="">
+                                  <div class="card-body">
+                                    <div class="row">
+                                      <div class="col-7">
+                                        <h2 class="lead"><b>{{ projeto.Autor }}</b></h2>
+                                        <p class="text-muted text-sm"><b>Tema: </b> {{ projeto.Tema }}</p>
+                                        <ul class="ml-4 mb-0 fa-ul text-muted">
+                                          <li class="small"><span class="fa-li"><i class="fa-regular fa-calendar"></i></span> {{ moment.locale('pt-br') }} {{ moment(projeto.data).format('L') }}</li>
+                                          <li class="small"><span class="fa-li"><i class="fa-solid fa-scale-unbalanced-flip"></i></span>
+                                            {{ projeto.Veredito }}</li>
+                                        </ul>
+                                      </div>
+                                      <div class="col-5 text-center">
+                                        <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{ projeto.Autor }}&direction=2&head_direction=3&size=l&action=std" alt="user-avatar" class="img-circle img-fluid bg-secondary p-1" style="width: 128px;object-fit: none;object-position: center -30px;height: 128px;">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </table>
+                      </div>
+                      <!-- /.tab-pane Projetos -->
+
+
+
+                      <!-- /.tab-pane sobre -->
+                      <div class="tab-pane" id="sobre">
+                        <div class="card-body p-0">
+                          <strong><i class="fa-solid fa-timeline"></i> História</strong>
+
+                          <p class="text-muted">{{ dados.História.história }}</p>
+
+                          <hr>
+
+                          <strong><i class="fas fa-list-check mr-1"></i> Contribuições e Projetos</strong>
+
+                          <p class="text-muted">{{ dados.História.Contribuições }}</p>
+
+                          <hr>
+
+                          <strong><i class="fa-regular fa-comment-dots"></i> Mensagem aos novatos</strong>
+
+                          <p class="text-muted">{{ dados.História.Novatos }}</p>
+
+                          <hr>
+
+                          <strong><i class="fa-solid fa-users-rectangle"></i> Sub-grupos que fez parte</strong>
+
+                          <p class="text-muted">{{ dados.História.SubGrupos }}</p>
+
+                          <hr>
+
+                          <strong><i class="fa-solid fa-ranking-star"></i> Conquistas</strong>
+
+                          <p class="text-muted">{{ dados.História.SubGrupos }}</p>
+                        </div>
+                    </div>
+                    <!-- /.tab-pane sobre -->
+
+
+
+                      </div>
+                      <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-2">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Meta parcial</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="chart-responsive"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <canvas id="pieChart" height="189" width="378" style="display: block; width: 378px; height: 189px;" class="chartjs-render-monitor"></canvas>
+                          </div>
+                          <!-- ./chart-responsive -->
+                        </div>
+                      </div>
+                      <!-- /.row -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-body">
+                        {% if dados.Parciais.Tipo == 'Instrutor' %}
+                          <ul class="list-group list-group-unbordered mb-3">
+                              <li class="list-group-item">
+                                CFSd <span class="float-right badge bg-orange text-white">{{ dados.Parciais.Meta1 }}</span>
                               </li>
-                          </ul>
-                        </a>
-                      </td>
-                      <td>{{ relatorio.Presentes }}</td>
-                      <td>{{ relatorio.Aprovados }}</td>
-                      <td>{{ relatorio.Comentários }}</td>
-                    </tr>
-                  {% endfor %}
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th></th>
-                    <th>Início</th>
-                    <th>Curso</th>
-                    <th>Instrutor</th>
-                    <th>Presentes</th>
-                    <th>Aprovados</th>
-                    <th>Comentários</th>
-                  </tr>
-                  </tfoot>
-                </table>
-          </div>
-          <!-- /.col -->
+                              <li class="list-group-item">
+                                  CFC1 <span class="float-right badge bg-navy text-white">{{ dados.Parciais.Meta2 }}</span>
+                              </li>
+                              <li class="list-group-item">
+                                  CFC <span class="float-right badge bg-teal text-white">{{ dados.Parciais.Meta3 }}</span>
+                              </li>
+                              <li class="list-group-item">
+                                  CAP <span class="float-right badge badge-info">{{ dados.Parciais.Meta4 }}</span>
+                              </li>
+                              <li class="list-group-item">
+                                  <b>Pontos</b> <span class="float-right badge badge-success">{{ dados.Parciais.Pontos }}</span>
+                              </li>
+                            </ul>
+                        {% elif dados.Parciais.Tipo == 'Graduador' %}
+                            <ul class="list-group list-group-unbordered mb-3">
+                              <li class="list-group-item">
+                                CFI <span class="float-right badge bg-orange text-white">{{ dados.Parciais.Meta1 }}</span>
+                              </li>
+                              <li class="list-group-item">
+                                  Acomp. <span class="float-right badge bg-navy text-white">{{ dados.Parciais.Meta2 }}</span>
+                              </li>
+                              <li class="list-group-item">
+                                  <b>Pontos</b> <span class="float-right badge badge-success">{{ dados.Parciais.Pontos }}</span>
+                              </li>
+                            </ul>
+                        {% elif dados.Parciais.Tipo == 'Avaliador' %}
+                            <ul class="list-group list-group-unbordered mb-3">
+                              <li class="list-group-item">
+                                AV.Ins <span class="float-right badge bg-orange text-white">{{ dados.Parciais.Meta1 }}</span>
+                              </li>
+                              <li class="list-group-item">
+                                  <b>Pontos</b> <span class="float-right badge badge-success">{{ dados.Parciais.Pontos }}</span>
+                              </li>
+                            </ul>
+                        {% elif dados.Parciais.Tipo == 'Capacitador' %}
+                            <ul class="list-group list-group-unbordered mb-3">
+                              <li class="list-group-item">
+                                CAP <span class="float-right badge bg-orange text-white">{{ dados.Parciais.Meta1 }}</span>
+                              </li>
+                              <li class="list-group-item">
+                                  <b>Pontos</b> <span class="float-right badge badge-success">{{ dados.Parciais.Pontos }}</span>
+                              </li>
+                            </ul>
+                        {% else %}
+                          <p class="text-muted">Esse usuário não faz parte da companhia.</p>
+                        {% endif %}
+                    </div>
+                    <!-- /.footer -->
+                  </div>
+                </div>
+              </div>
+              <!-- /.row -->
+
+
         </div>
-        <!-- /.row -->
-      </div>
-    </div>
-      <!-- /.container-fluid -->
-  </section>
+      </div><!--/. container-fluid -->
+    </section>
     <!-- /.content -->
-{{ super() }}
+  </div>
+  <!-- /.content-wrapper -->
+
 <script>
-  $(function () {
-   var table = $("#example2").DataTable({
-      "responsive": { details: false },
-                columns: [
-               {
-                className: 'dt-control',
-                orderable: false,
-                data: null,
-                defaultContent: '',
-                },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-          ],
-      "lengthChange": false,
-      "autoWidth": false,
-      "language": { url: '{{ url_for('static', filename='pt-BR.json')}}' },
-      "dom": "<'card card-outline card-info'<'card-header'<'card-title'l><'card-tools mr-1'f>>" +
-        "<'card-body p-0'<'row'<'col-sm-12'tr>>>" +
-        "<'card-footer'<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>>>",
-    });
-    function format (name) {
-    console.log(name);
-    return `<ul class="sliderprojet nav flex-column">\
-                  <li class="nav-item"><b>Data e hora:</b> ${name[1]}</li>\
-                  <li class="nav-item"><b>Curso:</b> ${name[2]}</li>\
-                  <li class="nav-item"><b>Instrutor:</b> ${name[3]}</li>\
-                  <li class="nav-item"><b>Presentes:</b> ${name[4]}</li>\
-                  <li class="nav-item"><b>Aprovados:</b> ${name[5]}</li>\
-                  <li class="nav-item"><b>Comentário:</b> ${name[6]}</li>\
-                </ul>`;
-}
-        $('#example2 tbody').on('click', 'td.dt-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row(tr);
+      var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+{% if dados.Parciais.Tipo == 'Instrutor' %}
+ var pieData = {
+    labels: [
+      'CFSd',
+      'CFC1',
+      'CFC2',
+      'CAP'
+    ],
+    datasets: [
+      {
+        data: [{{dados.Parciais.Meta1}}, {{dados.Parciais.Meta2}}, {{dados.Parciais.Meta3}}, {{dados.Parciais.Meta4}}],
+        backgroundColor: ['#fd7e14', '#001f3f', '#20c997', '#17a2b8']
+      }
+    ]
+  }
+  var pieOptions = {
+    legend: {
+      display: false
+    }
+  }
+                        {% elif dados.Parciais.Tipo == 'Graduador' %}
+ var pieData = {
+    labels: [
+      'CFI',
+      'Acomp'
+    ],
+    datasets: [
+      {
+        data: [{{dados.Parciais.Meta1}}, {{dados.Parciais.Meta2}}],
+        backgroundColor: ['#fd7e14', '#001f3f']
+      }
+    ]
+  }
+  var pieOptions = {
+    legend: {
+      display: false
+    }
+  }
+                        {% elif dados.Parciais.Tipo == 'Avaliador' %}
+  var pieData = {
+    labels: [
+      'AV.Ins'
+    ],
+    datasets: [
+      {
+        data: [{{dados.Parciais.Meta1}}],
+        backgroundColor: ['#fd7e14']
+      }
+    ]
+  }
+  var pieOptions = {
+    legend: {
+      display: false
+    }
+  }
+                        {% elif dados.Parciais.Tipo == 'Capacitador' %}
+  var pieData = {
+    labels: [
+      'CAP'
+    ],
+    datasets: [
+      {
+        data: [{{dados.Parciais.Meta1}}],
+        backgroundColor: ['#fd7e14']
+      }
+    ]
+  }
+  var pieOptions = {
+    legend: {
+      display: false
+    }
+  }
+                        {% else %}
+                            var pieData = {
+    labels: [
+      '',
+      '',
+      '',
+      ''
+    ],
+    datasets: [
+      {
+        data: [0, 0, 0, 0],
+        backgroundColor: ['#fd7e14', '#001f3f', '#20c997', '#17a2b8']
+      }
+    ]
+  }
+  var pieOptions = {
+    legend: {
+      display: false
+    }
+  }
+                        {% endif %}
+  var pieChart = new Chart(pieChartCanvas, {
+    type: 'doughnut',
+    data: pieData,
+    options: pieOptions
+  })
 
-        if (row.child.isShown()) {
-            // This row is already open - close it
-            $('ul.sliderprojet', row.child()).slideUp( function () {
-                row.child.hide();
-                tr.removeClass('shown');
-            } );
-        } else {
-            // Open this row
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
 
-             $('ul.sliderprojet', row.child()).slideDown();
-        }
-    });
-  });
 </script>
+<!-- ./wrapper -->
+{{ super() }}
 {%- endblock content %}
