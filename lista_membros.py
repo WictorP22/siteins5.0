@@ -232,6 +232,22 @@ def lista_projetos():
         })
     return retorno
 
+def lista_relatorios_instrutor():
+    aba_aulas = planilha_central.worksheet('[x] Relatórios')
+    aulas = aba_aulas.get('A2:G')
+    retorno = []
+    for aula in aulas:
+        retorno.append({
+            "Instrutor": aula[0],
+            "Início": aula[1],
+            "CursoExtenso": aula[2],
+            "Presentes": aula[3],
+            "Aprovados": aula[4],
+            "Comentários": aula[5],
+            "AulaAbreviada": aula[6]
+        })
+    return retorno
+
 def lista_membro():
     aba_lista_de_membros = planilha_central.worksheet("[X] Lista de Membros 2")
     lista = aba_lista_de_membros.get('S2:Z')

@@ -176,6 +176,14 @@ def scripts():
         return redirect('/')
     return render_template("scripts.html", scripts=busca_scripts())
 
+@app.route("/relatorios/instrutor")
+def relatorioInstrutor():
+    if not 'logado' in session:
+        return redirect('/login')
+    if session['membro'] == False:
+        return redirect('/')
+    return render_template("relatorios/instrutor.html", relatorios=lista_relatorios_instrutor())
+
 #consultar instrutor
 def consulta_instrutor(id):
     usuario = requests.get(f"https://www.habbo.com.br/api/public/users?name={id}")
@@ -210,5 +218,4 @@ def consulta_instrutor(id):
 
 #colocar site no ar
 if __name__ == "__main__":
-    busca_scripts()
     app.run(debug=True)
