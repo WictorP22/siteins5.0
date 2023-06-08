@@ -88,27 +88,6 @@
 <script>
 $(function () {
   var response, usuario, tag;
-  $.validator.addMethod(
-        "checaHabbo",
-        function(value, element) {
-            $.ajax({
-                type: "GET",
-                url: "https://www.habbo.com.br/api/public/users",
-                data: "name="+value,
-                dataType:"json",
-                success: function(msg)
-                {
-                    response=true
-                },
-                error: function()
-                {
-                  response=false
-                }
-             });
-            return response;
-        },
-        "Usuário não encontrado no Habbo"
-    );
   $.validator.setDefaults({
     submitHandler: function () {
       $('#register').submit();
@@ -117,8 +96,7 @@ $(function () {
   $('#register').validate({
     rules: {
       nick: {
-        required: true,
-        checaHabbo: true
+        required: true
       },
       tag: {
         required: true,
@@ -143,8 +121,7 @@ $(function () {
     },
     messages: {
       nick: {
-        required: "Insira o seu nickname",
-        checaHabbo: "Usuário não encontrado no Habbo"
+        required: "Insira o seu nickname"
       },
       tag: {
         required: "Insira sua TAG na RCC",
