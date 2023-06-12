@@ -1,21 +1,112 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Scripts - {% endblock %}</h1>
-  <style rel="stylesheet">
-    code {
-        overflow: auto;
-    display: block;
-    height: auto;
-    max-height: 250px;
-    white-space: normal;
-    padding-top: 5px;
-    font: 0.9em Courier,Courier New,monospace;
-    line-height: 1.3em;
-    color: #2E8B57;
-    margin: 2px 0;
-    }
-  </style>
+  <h1>{% block title %}{{scripts.Title}} - {% endblock %}</h1>
+<style>
+  .taggle_list {
+  padding: 0;
+  margin: 0;
+  line-height: 2.5;
+  width: 100%;
+}
+
+.taggle_input {
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.taggle_list li {
+  display: inline;
+  vertical-align: baseline;
+  white-space: nowrap;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.taggle_list .taggle {
+  margin-right: 8px;
+  background: #E2E1DF;
+  padding: 5px 10px;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  transition: all .3s;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+
+.taggle_list .taggle_hot {
+  background: #cac8c4;
+}
+
+.taggle_list .taggle .close {
+  font-size: 1.1rem;
+  position: absolute;
+  top: 10px;
+  right: 3px;
+  text-decoration: none;
+  padding: 0;
+  line-height: 0.5;
+  color: #ccc;
+  color: rgba(0, 0, 0, 0.2);
+  padding-bottom: 4px;
+  display: inline-block;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.taggle_list .taggle:hover {
+  padding: 5px;
+  padding-right: 15px;
+  background: #ccc;
+  transition: all .3s;
+}
+
+.taggle_list .taggle:hover > .close {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.taggle_list .taggle .close:hover {
+  color: #990033;
+}
+
+.taggle_placeholder {
+  position: absolute;
+  color: #CCC;
+  top: 24px;
+  left: 16px;
+  transition: opacity, .25s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.taggle_input {
+  padding: 8px;
+  padding-left: 0;
+  margin-top: -5px;
+  background: none;
+  max-width: 100%;
+}
+
+.taggle_sizer {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: -500px;
+  z-index: -1;
+  visibility: hidden;
+}
+</style>
 {% block script %}
     {{ super() }}
     {{ moment.include_moment() }}
@@ -28,39 +119,128 @@
       <div class="content">
         <div class="container">
 
-            <h3 class="mt-4 mb-4">Scripts</h3>
+            <h3 class="mt-4 mb-4">
+            </h3>
             <div class="row">
                 <div class="col-md-12">
-                  {% for script in scripts %}
-                      <div class="card card-{{script.Cor}} card-outline collapsed-card">
+                    <div class="card card-warning card-outline">
                         <div class="card-header">
-                          <h3 class="card-title">{{ script.Title }} - <small><b>última atualização:</b> <span id="{{script.Id}}"></span></small></h3>
-                          <script>
-                            $("#{{script.Id}}").html(moment('{{script.Atualização}}').locale('pt-br').format('LLL'));
-                          </script>
-                          <div class="card-tools">
-                            <a href="/script/{{script.Id}}">
-                              <button type="button" class="btn btn-tool">
-                                <i class="fas fa-plus" aria-hidden="true"></i>
-                              </button>
-                            </a>
-                          </div>
-                          <!-- /.card-tools -->
+                          <h3 class="card-title">{{ scripts.Title }}</h3>
                         </div>
                         <!-- /.card-header -->
-                        <!-- /.card-body -->
+                        <form name="inicial" method="post" action="/script/{{ scripts.Id }}">
+                          <div class="card-body">
+                              <input type="hidden" name="tipo" value="{{ scripts.Title }}" />
+                              <input type="hidden" name="inicio" value='{{ agora }}' />
+                              <div class="form-group">
+                                <label for="presentes">Nicks dos presentes: <small class="text-danger">Seprar por "/"</small></label>
+                                <input type="text" name="presentes" id="presentes"/>
+                              </div>
+                              {% set oldScript = scripts.Corpo %}
+                              {% set newScript = oldScript.replace('[nick]', session['nick']) %}
+                                {% set newScript = newScript.replace('[code]', '<pre><code class="language-html" data-lang="html">') %}
+                                {% set newScript = newScript.replace('[/code]', '</code></pre>') %}
+                                {% set newScript = newScript.replace('[spoiler]', '<div class="card collapsed-card card-outline card-info">') %}
+                                {% set newScript = newScript.replace('[/spoiler]', '</div>') %}
+                                {% set newScript = newScript.replace('[title]', '<div class="card-header"><div class="card-title">') %}
+                                {% set newScript = newScript.replace('[/title]', '</div><div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button></button></div></div>') %}
+                                {% set newScript = newScript.replace('[body]', '<div class="card-body">') %}
+                                {% set newScript = newScript.replace('[/body]', '</div>') %}
+                                {% set newScript = newScript.replace('[TAG]', session['tag']) %}
+                              {% autoescape false %}
+                                {{newScript}}
+                              {% endautoescape %}
+                              <div class="form-group">
+                                <label for="aprovados">Nicks dos aprovados:</label>
+                                <input type="text" name="aprovados" id="aprovados"/>
+                              </div>
+                            <div class="form-group">
+                              <label for="comentarios">Comentários:</label>
+                              <input class="form-control" type="text" name="comentarios" id="comentarios"/>
+                            </div>
+                          </div>
+                          <div class="card-footer">
+                            <button type="submit" data-toggle="modal" data-target="#modal-default" class="btn btn-success">Enviar</button>
+                          </div>
+                        </form>
                       </div>
-                  {% endfor %}
                 </div>
             </div>
-
-
-
         </div>
       </div><!--/. container-fluid -->
     </section>
     <!-- /.content -->
   </div>
+{% autoescape false %}
+                                {{teste}}
+                              {% endautoescape %}
   <!-- /.content-wrapper -->
 {{ super() }}
+
+<script>
+  $(function () {
+var adicionaAprovados = function(name) {
+  return function() {
+        control.addOption({
+    id: arguments[0],
+    title: arguments[0],
+    url: arguments[0]
+    });
+  };
+};
+var presentes = $("#presentes").selectize({
+  delimiter: " / ",
+  persist: false,
+  maxItems: null,
+  onItemAdd: adicionaAprovados(),
+  create: function (input) {
+    return {
+      value: input,
+      text: input,
+    };
+  },
+});
+var $aprovados = $('#aprovados').selectize({
+  maxItems: null,
+  delimiter: " / ",
+  valueField: 'id',
+  labelField: 'title',
+  searchField: 'title',
+  create: false
+});
+var control = $aprovados[0].selectize;
+  });
+    $(function () {
+var adicionaAprovados2 = function(name) {
+  return function() {
+        control2.addOption({
+    id: arguments[0],
+    title: arguments[0],
+    url: arguments[0]
+    });
+  };
+};
+var $presentes2 = $(".presentes").selectize({
+  delimiter: " / ",
+  persist: false,
+  maxItems: null,
+  onItemAdd: adicionaAprovados2(),
+  create: false
+});
+var $aprovados2 = $('.aprovados').selectize({
+  maxItems: null,
+  delimiter: " / ",
+  valueField: 'id',
+  labelField: 'title',
+  searchField: 'title',
+  create: false,
+});
+var control2 = $aprovados2[0].selectize;
+var control3 = $presentes2[0].selectize;
+$("#editar").click(function() {
+ $("input").prop("readonly", false);
+});
+  });
+</script>
+
 {%- endblock content %}
