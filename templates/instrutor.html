@@ -41,7 +41,7 @@
                           <b>Sub-grupos</b> <span class="float-right badge badge-primary">{{ dados.Membro.TAGs }}</span>
                         </li>
                         <li class="list-group-item">
-                            <b>Tempo de CIA</b> <span id="tempo" class="float-right badge badge-primary">{% if not dados.Membro.Entrada %}-{% else %}{{ moment.locale('pt-br') }}{{ moment(dados.Membro.Entrada).fromNow() }}{% endif %}</span>
+                            <b>Tempo de CIA</b> <span id="tempo" class="float-right badge badge-primary">{% if not dados.Membro.Entrada %}-{% else %}{{ moment.locale('pt-br') }}{{ moment(dados.Membro.Entrada).format('L') }}{% endif %}</span>
                         </li>
                         <li class="list-group-item">
                             <b>Situação</b>
