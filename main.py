@@ -205,7 +205,7 @@ def script(id):
         <div class="modal-dialog">\
           <div class="modal-content">\
             <div class="modal-header card-outline card-primary">\
-              <h4 class="modal-title">Default Modal</h4>\
+              <h4 class="modal-title">Confirme os dados</h4>\
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
                 <span aria-hidden="true">&times;</span>\
               </button>\
