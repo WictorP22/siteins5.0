@@ -176,6 +176,96 @@ def scripts():
         return redirect('/')
     return render_template("scripts.html", scripts=busca_scripts())
 
+@app.route("/script/<id>", methods=['GET', 'POST'])
+def script(id):
+    if not 'logado' in session:
+        return redirect('/login')
+    if session['membro'] == False:
+        return redirect('/')
+    if request.method == 'GET':
+        return render_template("script.html", scripts=busca_script(id), agora=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), enviou='nao enviou', teste=' ')
+    elif request.method == 'POST':
+        script=busca_script(id)
+        presentes = request.form['presentes']
+        aprovados = request.form['aprovados']
+        inicio = request.form['inicio']
+        tipo = request.form['tipo']
+        comentarios = request.form['comentarios']
+        fim = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        if not 'final' in request.form:
+            html = '<button type="button" id="btnmodal" class="btn btn-default" style="display:none;" data-toggle="modal" data-target="#modal-default">\
+                  Confira os dados\
+                </button>\
+                <script>\
+            $(function() {\
+                $("#btnmodal").click();\
+            });\
+        </script>\
+        <div class="modal fade show" id="modal-default" style="display: block; padding-right: 17px;" aria-modal="true" role="dialog">\
+        <div class="modal-dialog">\
+          <div class="modal-content">\
+            <div class="modal-header card-outline card-primary">\
+              <h4 class="modal-title">Default Modal</h4>\
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
+                <span aria-hidden="true">&times;</span>\
+              </button>\
+            </div>\
+        <form name="final" method="post" action="/script/%s">\
+            <input type="hidden" name="tipo" value="%s" />\
+            <input type="hidden" name="final" value="1">\
+            <div class="modal-body">\
+              <div class="row">\
+                <div class="col-md-6">\
+                  <div class="form-group">\
+                    <label for="inicio">Início da aula</label>\
+                    <input type="text" name="inicio" value="%s" id="inicio" readonly="readonly" class="form-control"/>\
+                  </div>\
+                </div>\
+                <div class="col-md-6">\
+                  <div class="formp-group">\
+                    <label for="fim">Fim</label>\
+                    <input type="text" name="fim" value="%s" id="fim" readonly="readonly" class="form-control"/>\
+                  </div>\
+                </div>\
+              </div>\
+              <div class="row">\
+                <div class="col-md-6">\
+                  <div class="form-group">\
+                    <label for="presentes">Presentes</label>\
+                    <input type="text" readonly="readonly" name="presentes" value="%s" class="presentes"/>\
+                  </div>\
+                </div>\
+                <div class="col-md-6">\
+                  <div class="formp-group">\
+                    <label for="aprovados">Aprovados</label>\
+                    <input type="text" readonly="readonly" name="aprovados" value="%s" class="aprovados"/>\
+                  </div>\
+                </div>\
+              </div>\
+              <div class="row">\
+                <label for="comentarios">Comentários</label>\
+                <input type="text" name="comentarios" value="%s" readonly="readonly" id="comentarios" class="form-control"/>\
+              </div>\
+            </div>\
+            <div class="modal-footer justify-content-between">\
+              <button type="button" id="editar" class="btn btn-default">Editar</button>\
+              <button type="submit" class="btn btn-success">Enviar</button>\
+            </div>\
+                </form>\
+          </div>\
+          <!-- /.modal-content -->\
+        </div>\
+        <!-- /.modal-dialog -->\
+      </div>\
+      <!-- /.modal -->'%(script['Id'], script['Title'], inicio, fim, presentes, aprovados, comentarios)
+            return render_template("script.html", scripts=script,
+                                   agora=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), teste=html, teste2=request.form)
+        else:
+            insereAula(tipo, inicio, presentes, aprovados, fim, comentarios, session['nick'])
+            return redirect('/scripts')
+    else:
+        redirect('/')
+
 @app.route("/relatorios/instrutor")
 def relatorioInstrutor():
     if not 'logado' in session:
@@ -183,6 +273,14 @@ def relatorioInstrutor():
     if session['membro'] == False:
         return redirect('/')
     return render_template("relatorios/instrutor.html", relatorios=lista_relatorios_instrutor())
+
+@app.route("/parciais/instrutor")
+def parciaisInstrutor():
+    if not 'logado' in session:
+        return redirect('/login')
+    if session['membro'] == False:
+        return redirect('/')
+    return render_template("parciais/instrutor.html", parciais=buscaParciais())
 
 #consultar instrutor
 def consulta_instrutor(id):

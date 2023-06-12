@@ -3,6 +3,7 @@ from datetime import datetime, date, timedelta, timezone
 
 gc = gspread.service_account(filename='service_acoount.json')
 planilha_central = gc.open_by_key('1NeWXNJnloZ4n_4DoOy3v2XPx3Q2EIFQOO_8mtU6FabA')
+planilha_relatorios = gc.open_by_key('12mbGProgrQnDfrkeau5UdLXtvm6KCqs0pg8T7hg6Xr4')
 def busca_lista(nick):
     aba_lista_de_membros = planilha_central.worksheet("[x] Lista de Membros")
     lista = aba_lista_de_membros.get('AE2:Aq')
@@ -276,3 +277,26 @@ def lista_membro():
                 }
                 i = i+1
     return retorno;
+
+def insereAula(tipo, inicio, presentes, aprovados, fim, comentarios, nick):
+    aba_aulas = planilha_relatorios.get_worksheet_by_id(699920204)
+    valores = len(aba_aulas.col_values(1))+1
+    #atualizaPlan = aba_aulas.update(f"A{valores}:G{valores}", [[fim, nick, inicio, tipo, presentes, aprovados, comentarios]])
+    attTEste = aba_aulas.append_row([fim, nick, inicio, tipo, presentes, aprovados, comentarios], value_input_option='USER_ENTERED')
+    return (tipo, inicio, presentes, aprovados, fim)
+
+def buscaParciais():
+    aba_parciais = planilha_central.worksheet('[x] Parciais')
+    parciais = aba_parciais.get('A2:I1000')
+    retorno = []
+    for parcial in parciais:
+        retorno.append({
+            "Instrutor": parcial[0],
+            "CFSd": parcial[1],
+            "CFC1": parcial[2],
+            "CFC2": parcial[3],
+            "CAP": parcial[4],
+            "Pontos": parcial[5],
+            "Caso": parcial[8]
+        })
+    return retorno

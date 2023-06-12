@@ -96,14 +96,8 @@
                       <a tabindex="-1" href="/scripts" class="dropdown-item">Scripts</a>
                     </li>
 
-                    <li class="dropdown-submenu">
-                      <a id="dropdownSubMenu3" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Formulários</a>
-                      <ul aria-labelledby="dropdownSubMenu3" class="dropdown-menu border-0 shadow">
-                        <li><a href="https://iformv2.vercel.app/?username={{ session['nick'] }}&lesson=cfsd" target="_blank" class="dropdown-item">CFSd</a></li>
-                        <li><a href="https://iformv2.vercel.app/?username={{ session['nick'] }}&lesson=cfci" target="_blank" class="dropdown-item">CFC1</a></li>
-                        <li><a href="https://iformv2.vercel.app/?username={{ session['nick'] }}&lesson=cfcii" target="_blank" class="dropdown-item">CFC2</a></li>
-                        <li><a href="https://iformv2.vercel.app/?username={{ session['nick'] }}&lesson=cap" target="_blank" class="dropdown-item">CAP</a></li>
-                      </ul>
+                    <li>
+                      <a tabindex="-1" href="/parciais/instrutor" class="dropdown-item">Meta Parcial</a>
                     </li>
                     <li>
                       <a tabindex="-1" href="/relatorios/instrutor" class="dropdown-item">Relatórios</a>
@@ -189,6 +183,15 @@
     <script src="{{ url_for('static', filename='plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{ url_for('static', filename='dist/js/adminlte.js')}}"></script>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<script
+  src="https://selectize.dev/js/selectize.js"></script>
     </body>
     </html>
   {%- endblock footer %}

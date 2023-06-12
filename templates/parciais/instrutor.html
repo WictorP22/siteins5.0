@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Documentos - {% endblock %}</h1>
+{% block script %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+{% endblock %}
+{% endblock %}
+
+{% block content %}
+<!-- Main content -->
+<style>
+  .sliderprojet {
+    display:none;
+  }
+</style>
+  <section class="content-wrapper">
+    <div class="content">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 mt-2">
+                <table id="example2" class="table table-striped table-hover projects">
+                  <thead>
+                  <tr>
+                    <th></th>
+                    <th>Instrutor</th>
+                    <th>CFSd</th>
+                    <th>CFC1</th>
+                    <th>CFC2</th>
+                    <th>CAP</th>
+                    <th>Pontos</th>
+                    <th>Situação</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for parcial in parciais %}
+                  {% if parcial.Caso == "Positivo" %}
+                  {% set classe = "badge-success" %}
+                  {% elif parcial.Caso == "Recém-ingressado" %}
+                  {% set classe = "badge-info" %}
+                  {% elif parcial.Caso == "Em licença" %}
+                  {% set classe = "badge-warning" %}
+                  {% elif parcial.Caso == "Negativo" %}
+                  {% set classe="badge-danger" %}
+                  {% else %}
+                  {% set classe="badge-light" %}
+                  {% endif %}
+                    <tr>
+                      <td></td>
+                      <td class="text-center">
+                        <a href="https://inssystem.herokuapp.com/instrutor?policial={{parcial.Instrutor}}">
+                          <ul class="list-inline">
+                              <li class="list-inline-item text-center">
+                                  <img alt="Avatar" class="table-avatar bg-info" style="height: 2.5rem;object-fit: none;object-position: center -30px;    padding: 0.1rem!important;" src="https://www.habbo.com.br/habbo-imaging/avatarimage?img_format=png&user={{ parcial.Instrutor}}&direction=2&head_direction=3&size=m&action=std"></br>
+                                {{ parcial.Instrutor }}
+                              </li>
+                          </ul>
+                        </a>
+                      </td>
+                      <td class="dtr-control">{{ parcial.CFSd }}</td>
+                      <td>{{ parcial.CFC1 }}</td>
+                      <td>{{ parcial.CFC2 }}</td>
+                      <td>{{ parcial.CAP }}</td>
+                      <td>{{ parcial.Pontos }}</td>
+                      <td><span class="badge {{classe}}">{{ parcial.Caso }}</span></td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th></th>
+                    <th>Instrutor</th>
+                    <th>CFSd</th>
+                    <th>CFC1</th>
+                    <th>CFC2</th>
+                    <th>CAP</th>
+                    <th>Pontos</th>
+                    <th>Situação</th>
+                  </tr>
+                  </tfoot>
+                </table>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+    </div>
+      <!-- /.container-fluid -->
+  </section>
+    <!-- /.content -->
+{{ super() }}
+<script>
+  $(function () {
+   var table = $("#example2").DataTable({
+      "responsive": { details: false },
+                columns: [
+               {
+                className: 'dt-control',
+                orderable: false,
+                data: null,
+                defaultContent: '',
+                },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+      "lengthChange": false,
+      "autoWidth": false,
+      "language": { url: '{{ url_for('static', filename='pt-BR.json')}}' },
+      "dom": "<'card card-outline card-info'<'card-header'<'card-title'l><'card-tools mr-1'f>>" +
+        "<'card-body p-0'<'row'<'col-sm-12'tr>>>" +
+        "<'card-footer'<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>>>",
+                paging: false,
+        ordering: false,
+        info: false,
+    });
+    function format (name) {
+    console.log(name);
+    return `<ul class="sliderprojet nav flex-column">\
+                  <li class="nav-item"><b>Data e hora:</b> ${name[1]}</li>\
+                  <li class="nav-item"><b>Curso:</b> ${name[2]}</li>\
+                  <li class="nav-item"><b>Instrutor:</b> ${name[3]}</li>\
+                  <li class="nav-item"><b>Presentes:</b> ${name[4]}</li>\
+                  <li class="nav-item"><b>Aprovados:</b> ${name[5]}</li>\
+                  <li class="nav-item"><b>Comentário:</b> ${name[6]}</li>\
+                </ul>`;
+}
+        $('#example2 tbody').on('click', 'td.dt-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            $('ul.sliderprojet', row.child()).slideUp( function () {
+                row.child.hide();
+                tr.removeClass('shown');
+            } );
+        } else {
+            // Open this row
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
+
+             $('ul.sliderprojet', row.child()).slideDown();
+        }
+    });
+  });
+</script>
+{%- endblock content %}
