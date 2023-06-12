@@ -66,3 +66,27 @@ def busca_scripts():
                 "Cor": cor
             })
     return retorno
+
+def busca_script(id):
+    posts = blog.posts().list(blogId=BlogID).execute()
+    for post in posts['items']:
+        if post['id'] == id:
+            if 'primary' in post['labels']:
+                cor = 'primary'
+            elif 'warning' in post['labels']:
+                cor = 'warning'
+            elif 'danger' in post['labels']:
+                cor = 'danger'
+            elif 'info' in post['labels']:
+                cor = 'info'
+            else:
+                cor = 'light'
+            publicado = post['updated'][0:19]
+            return {
+                "Id": post['id'],
+                "Title": post['title'],
+                "Atualização": post['updated'],
+                "Corpo": post['content'],
+                "Tipo": post['labels'][0],
+                "Cor": cor
+            }
