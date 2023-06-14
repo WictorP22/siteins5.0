@@ -55,16 +55,19 @@ def busca_scripts():
                 cor = 'info'
             else:
                 cor = 'light'
-            publicado = post['updated'][0:19]
-            data = datetime.strptime(publicado, '%Y-%m-%dT%H:%M:%S')
-            retorno.append({
-                "Id": post['id'],
-                "Title": post['title'],
-                "Atualização": post['updated'],
-                "Corpo": post['content'],
-                "Tipo": post['labels'][0],
-                "Cor": cor
-            })
+            if len(posts['labels']) == 2:
+                publicado = post['updated'][0:19]
+                data = datetime.strptime(publicado, '%Y-%m-%dT%H:%M:%S')
+                retorno.append({
+                    "Id": post['id'],
+                    "Title": post['title'],
+                    "Atualização": post['updated'],
+                    "Corpo": post['content'],
+                    "Tipo": post['labels'][0],
+                    "Cor": cor
+                })
+            else:
+                print(post['labels'])
     return retorno
 
 def busca_script(id):
