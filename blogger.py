@@ -55,7 +55,7 @@ def busca_scripts():
                 cor = 'info'
             else:
                 cor = 'light'
-            if len(posts['labels']) == 2:
+            if len(post['labels']) == 2:
                 publicado = post['updated'][0:19]
                 data = datetime.strptime(publicado, '%Y-%m-%dT%H:%M:%S')
                 retorno.append({
