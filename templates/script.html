@@ -131,6 +131,7 @@
                         <form name="inicial" method="post" action="/script/{{ scripts.Id }}">
                           <div class="card-body">
                               <input type="hidden" name="tipo" value="{{ scripts.Title }}" />
+                            <input type="hidden" name="cargo" value="{{ scripts.Tipo }}" />
                               <input type="hidden" name="inicio" value='{{ agora }}' />
                               <div class="form-group">
                                 <label for="presentes">Nicks dos presentes: <small class="text-danger">Seprar por "/"</small></label>

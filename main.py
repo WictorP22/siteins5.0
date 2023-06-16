@@ -160,7 +160,7 @@ def projetos():
 def membros():
     if not 'logado' in session:
         return redirect('/login')
-    return render_template("membros.html", lista=lista_membro())
+    return render_template("membros.html", lista=lista_membro(), departamentos=lista_membros_departamento())
 
 @app.route("/auditoria")
 def auditoria():
@@ -174,7 +174,7 @@ def scripts():
         return redirect('/login')
     if session['membro'] == False:
         return redirect('/')
-    return render_template("scripts.html", scripts=busca_scripts())
+    return render_template("scripts.html", scripts=busca_scripts(session['nick']))
 
 @app.route("/script/<id>", methods=['GET', 'POST'])
 def script(id):
@@ -190,6 +190,7 @@ def script(id):
         aprovados = request.form['aprovados']
         inicio = request.form['inicio']
         tipo = request.form['tipo']
+        cargo = request.form['cargo']
         comentarios = request.form['comentarios']
         fim = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         if not 'final' in request.form:
@@ -211,6 +212,7 @@ def script(id):
               </button>\
             </div>\
         <form name="final" method="post" action="/script/%s">\
+            <input type="hidden" name="cargo" value="%s" />\
             <input type="hidden" name="tipo" value="%s" />\
             <input type="hidden" name="final" value="1">\
             <div class="modal-body">\
@@ -257,11 +259,11 @@ def script(id):
         </div>\
         <!-- /.modal-dialog -->\
       </div>\
-      <!-- /.modal -->'%(script['Id'], script['Title'], inicio, fim, presentes, aprovados, comentarios)
+      <!-- /.modal -->'%(script['Id'], cargo, script['Title'], inicio, fim, presentes, aprovados, comentarios)
             return render_template("script.html", scripts=script,
                                    agora=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), teste=html, teste2=request.form)
         else:
-            insereAula(tipo, inicio, presentes, aprovados, fim, comentarios, session['nick'])
+            insereAula(tipo, cargo, inicio, presentes, aprovados, fim, comentarios, session['nick'])
             return redirect('/scripts')
     else:
         redirect('/')

@@ -4,6 +4,7 @@ from datetime import datetime, date, timedelta, timezone
 gc = gspread.service_account(filename='service_acoount.json')
 planilha_central = gc.open_by_key('1NeWXNJnloZ4n_4DoOy3v2XPx3Q2EIFQOO_8mtU6FabA')
 planilha_relatorios = gc.open_by_key('12mbGProgrQnDfrkeau5UdLXtvm6KCqs0pg8T7hg6Xr4')
+planilha_graduadores = gc.open_by_key('1trA4goSV1himOUqzRlv3kPjRy4riqWATFIv4F4ksvgA')
 def busca_lista(nick):
     aba_lista_de_membros = planilha_central.worksheet("[x] Lista de Membros")
     lista = aba_lista_de_membros.get('AE2:Aq')
@@ -278,12 +279,16 @@ def lista_membro():
                 i = i+1
     return retorno;
 
-def insereAula(tipo, inicio, presentes, aprovados, fim, comentarios, nick):
-    aba_aulas = planilha_relatorios.get_worksheet_by_id(699920204)
-    valores = len(aba_aulas.col_values(1))+1
-    #atualizaPlan = aba_aulas.update(f"A{valores}:G{valores}", [[fim, nick, inicio, tipo, presentes, aprovados, comentarios]])
-    attTEste = aba_aulas.append_row([fim, nick, inicio, tipo, presentes, aprovados, comentarios], value_input_option='USER_ENTERED')
-    return (tipo, inicio, presentes, aprovados, fim)
+def insereAula(tipo, cargo, inicio, presentes, aprovados, fim, comentarios, nick):
+    if cargo == "Instrutor":
+        aba_aulas = planilha_relatorios.get_worksheet_by_id(699920204)
+        atualizaPlan = aba_aulas.append_row([fim, nick, inicio, tipo, presentes, aprovados, comentarios], value_input_option='USER_ENTERED')
+    if cargo == "Graduador":
+        aba_aulas = planilha_graduadores.get_worksheet_by_id(1302128534)
+        inicio2 = datetime.strptime(inicio, '%d/%m/%Y %H:%M:%S')
+        inicio2 = datetime.strftime(inicio2, '%d/%m/%Y - %H:%M')
+        print(inicio2)
+        atualizaPlan = aba_aulas.append_row([fim, nick, inicio2, ' ',presentes,aprovados,comentarios], value_input_option='USER_ENTERED')
 
 def buscaParciais():
     aba_parciais = planilha_central.worksheet('[x] Parciais')
@@ -299,4 +304,50 @@ def buscaParciais():
             "Pontos": parcial[5],
             "Caso": parcial[8]
         })
+    return retorno
+
+def lista_membros_departamento():
+    aba_departamento = planilha_central.worksheet('[x] Lista de Departamentos')
+    src = aba_departamento.get('A2:B30')
+    ssi = aba_departamento.get('E2:F30')
+    soi = aba_departamento.get('I2:J30')
+    da = aba_departamento.get('M2:N30')
+    retorno = {}
+    retorno['Setor de Relações Comunicativas'] = {}
+    retorno['Setor de Segurança dos Instrutores'] = {}
+    retorno['Setor de Orientação dos Instrutores'] = {}
+    retorno['Departamento de Aplicação'] = {}
+    for ret in retorno:
+        if ret == 'Setor de Relações Comunicativas':
+            i = 0
+            for member in src:
+                retorno[ret][i] = {
+                    "Nick": member[1],
+                    "Cargo": member[0],
+                }
+                i = i+1
+        elif ret == 'Setor de Segurança dos Instrutores':
+            i = 0
+            for member in ssi:
+                retorno[ret][i] = {
+                    "Nick": member[1],
+                    "Cargo": member[0],
+                }
+                i = i + 1
+        elif ret == 'Setor de Orientação dos Instrutores':
+            i = 0
+            for member in soi:
+                retorno[ret][i] = {
+                    "Nick": member[0],
+                    "Cargo": member[1],
+                }
+                i = i + 1
+        elif ret == 'Departamento de Aplicação':
+            i = 0
+            for member in da:
+                retorno[ret][i] = {
+                    "Nick": member[1],
+                    "Cargo": member[0],
+                }
+                i = i + 1
     return retorno

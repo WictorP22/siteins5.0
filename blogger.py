@@ -1,5 +1,8 @@
+from flask import session
 from googleapiclient.discovery import build
 from datetime import datetime
+
+from lista_membros import busca_lista
 
 Key = "AIzaSyDJMPIX2CuoHD1U6XSHUEzxXTcUd0dBdrU"  # Replace with your API key.
 
@@ -40,7 +43,7 @@ def busca_anuncio(id):
             }
     return retorno
 
-def busca_scripts():
+def busca_scripts(nick = ' '):
     posts = blog.posts().list(blogId=BlogID).execute()
     retorno = []
     for post in posts['items']:
@@ -55,7 +58,7 @@ def busca_scripts():
                 cor = 'info'
             else:
                 cor = 'light'
-            if len(post['labels']) == 2:
+            if post['labels'][0] == 'Instrutor':
                 publicado = post['updated'][0:19]
                 data = datetime.strptime(publicado, '%Y-%m-%dT%H:%M:%S')
                 retorno.append({
@@ -67,7 +70,19 @@ def busca_scripts():
                     "Cor": cor
                 })
             else:
-                print(post['labels'])
+                if nick != ' ':
+                    membro = busca_lista(nick)
+                    if ((post['labels'][0] == membro['Cargo']) or (membro['Cargo'] == "Ministro") or (membro['Cargo'] == "Vice-Líder") or (membro['Cargo'] == "Líder")):
+                        publicado = post['updated'][0:19]
+                        data = datetime.strptime(publicado, '%Y-%m-%dT%H:%M:%S')
+                        retorno.append({
+                            "Id": post['id'],
+                            "Title": post['title'],
+                            "Atualização": post['updated'],
+                            "Corpo": post['content'],
+                            "Tipo": post['labels'][0],
+                            "Cor": cor
+                        })
     return retorno
 
 def busca_script(id):
