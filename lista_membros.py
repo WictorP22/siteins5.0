@@ -350,4 +350,5 @@ def lista_membros_departamento():
                     "Cargo": member[0],
                 }
                 i = i + 1
+    print(retorno)
     return retorno
